@@ -392,7 +392,7 @@ int osd_data_init(void)
 		memset(osd_infos.osd[i][j].osd_buf,0,XM_MAX_OSD_WIDTH*XM_MAX_OSD_HEIGHT*2);
 			if(i==0){//前路gps水印
 			 osd_infos.osd[i][j].x =128+20*32*8192/width_v;  //超始位置横坐标，以8192为基准	
-			 osd_infos.osd[i][j].y = osd_y - 400;  //超始位置纵坐标，以8192为基准
+			 osd_infos.osd[i][j].y = osd_y;  //超始位置纵坐标，以8192为基准
 		   }else if(i==1){//后路gps水印
 			  osd_infos.osd[i][j].x =128+20*32*8192/1920;  //超始位置横坐标，以8192为基准
 			  osd_infos.osd[i][j].y = osd_y1;  //超始位置纵坐标，以8192为基准
