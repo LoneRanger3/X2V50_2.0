@@ -351,6 +351,19 @@ void PageMain::Function_bar(bool flag)
         }
         lv_obj_align_to(silent_record_img_, slash_img3_, LV_ALIGN_OUT_RIGHT_MID, -size_w(4), size_h(0));
 
+#if 1
+        lv_obj_t* bar_wifi_img_ = lv_img_create(Function_page_);
+        lv_img_set_src(bar_wifi_img_, image_path"0wifi.png");
+        lv_obj_align_to(bar_wifi_img_, silent_record_img_, LV_ALIGN_OUT_RIGHT_MID, size_w(10), size_h(0));
+        
+        lv_obj_t* slash_img4_ = lv_img_create(Function_page_);
+        lv_img_set_src(slash_img4_, image_path"slash.png");
+        lv_obj_align_to(slash_img4_, bar_wifi_img_, LV_ALIGN_OUT_RIGHT_MID, -size_w(4), size_h(0));
+        
+        playback_img_ = lv_img_create(Function_page_);
+        lv_img_set_src(playback_img_, image_path"playback_on.png");
+        lv_obj_align_to(playback_img_, slash_img4_, LV_ALIGN_OUT_RIGHT_MID, -size_w(4), size_h(0));
+#else
         playback_img_ = lv_img_create(Function_page_);
         lv_img_set_src(playback_img_, image_path"playback_on.png");
         lv_obj_align_to(playback_img_, silent_record_img_, LV_ALIGN_OUT_RIGHT_MID, size_w(10), size_h(0));
@@ -362,6 +375,7 @@ void PageMain::Function_bar(bool flag)
 		lv_obj_t* bar_wifi_img_ = lv_img_create(Function_page_);
         lv_img_set_src(bar_wifi_img_, image_path"0wifi.png");
         lv_obj_align_to(bar_wifi_img_, slash_img4_, LV_ALIGN_OUT_RIGHT_MID, -size_w(4), size_h(0));
+#endif
     }
 
 	XMLogW("[Function_bar] in bar 3, init_flag = (%d,%d) \n", Settings_Function_bar_flag, flag);
@@ -1137,7 +1151,7 @@ void PageMain::StartRecord(bool compact_record)
 		HTTPSerMdl::Instance()->tcpRecStatus(g_engineId, 1);
 		record_start_time_ = GetTickTime();
 		
-		XMLogW("[vdec error][record time] before ChangeRecordTime \n");
+		//XMLogW("[vdec error][record time] before ChangeRecordTime \n");
 		record_timer_ = lv_timer_create(ChangeRecordTime, 100, NULL);
 
 		//录像时关闭自动关机功能
@@ -1265,14 +1279,14 @@ void PageMain::ChangeRecordTime(lv_timer_t* timer)
 
 	int time = XM_Middleware_Storage_GetRecordedTime(XM_STORAGE_SDCard_0, Direction_Front) / 1000;
 	
-	XMLogW("[vdec error][record time] in ChangeRecordTime 2, time:(%d,%d) \n", time, GlobalPage::Instance()->page_main()->pre_record_time_);
+	//XMLogW("[vdec error][record time] in ChangeRecordTime 2, time:(%d,%d) \n", time, GlobalPage::Instance()->page_main()->pre_record_time_);
 	if (GlobalPage::Instance()->page_main()->pre_record_time_ != time) {
 		GlobalPage::Instance()->page_main()->pre_record_time_ = time;
 		char buf[32] = { 0 };
 		sprintf(buf, "%02d:%02d", time / 60, time % 60);
 		lv_label_set_text(GlobalPage::Instance()->page_main()->record_time_label_, buf);
 		
-		XMLogW("[vdec error][record time] in ChangeRecordTime , time:(%d,%d), buf: %s \n", buf);
+		//XMLogW("[vdec error][record time] in ChangeRecordTime , time:(%d,%d), buf: %s \n", buf);
 		//控制蓝色灯闪烁
 		GlobalPage::Instance()->page_main()->led_on_ = !GlobalPage::Instance()->page_main()->led_on_;
 		PeripheryManager::Instance()->CameraLedControl(GlobalPage::Instance()->page_main()->led_on_);
@@ -1671,8 +1685,8 @@ void PageMain::RecordPicModeKeypad(int key)
 			}
 		}
 	}
-	else if (key == KEYMAP_MENU || key == KEYMAP_MODE) {
-		if (key == KEYMAP_MODE && !lv_obj_has_flag(main_page_, LV_OBJ_FLAG_HIDDEN)) {
+	else if (key == KEYMAP_MENU || key == KEYMAP_MODE || key == KEYMAP_LONG_MODE) {//modify wanghcen.2025.3.27
+		if (key == KEYMAP_LONG_MODE && !lv_obj_has_flag(main_page_, LV_OBJ_FLAG_HIDDEN)) {
 			// if (GlobalData::Instance()->UI_mode_ == UIMode_Videotape) {
 			// 	ChangeMode(UIMode_Photograph);
 			// }

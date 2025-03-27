@@ -594,15 +594,15 @@ static uint32_t keypad_get_key(void)
         }
         return KEYMAP_UP;
     }
-   
-   else if (key == KEYMAP_LONG_MODE) {
+   //else if (key == KEYMAP_LONG_MODE) {
+   else if (key == KEYMAP_MODE && (!lv_obj_has_flag(GlobalPage::Instance()->page_main()->Function_page_, LV_OBJ_FLAG_HIDDEN)) && (!lv_obj_has_flag(GlobalPage::Instance()->page_main()->main_page_, LV_OBJ_FLAG_HIDDEN))) {
      if (!lv_obj_has_flag(GlobalPage::Instance()->page_main()->main_page_, LV_OBJ_FLAG_HIDDEN) && GlobalData::Instance()->UI_mode_ == UIMode_Videotape) {
           if (GlobalPage::Instance()->page_main()->wifi_prepared_) {
            lv_event_send(GlobalPage::Instance()->page_main()->wifi_img_, LV_EVENT_CLICKED, NULL);
           return 0;
        }
       }
-       return KEYMAP_LONG_MODE;
+       return KEYMAP_MODE;
     }
 
     else if (key == KEYMAP_LONG_DOWN) {
@@ -616,7 +616,8 @@ static uint32_t keypad_get_key(void)
        return KEYMAP_LONG_DOWN;
     }
     //else if (key == KEYMAP_MODE /*|| key == KEYMAP_MENU */) {
-    else if (key == KEYMAP_MODE || key == KEYMAP_MENU) {
+    //else if (key == KEYMAP_MODE || key == KEYMAP_MENU) {
+	else if (key == KEYMAP_MODE || key == KEYMAP_MENU || key == KEYMAP_LONG_MODE) {
         // if(GlobalPage::Instance()->page_main()->wifi_enable_ && !lv_obj_has_flag(GlobalPage::Instance()->page_main()->main_page_, LV_OBJ_FLAG_HIDDEN)){
         //   GlobalPage::Instance()->page_main()->WIFITipWin();
         // } else{

@@ -1298,7 +1298,7 @@ int OnUIEventCallback(XMUIEventType ui_event_type, XMUIEventInParam* in_param, X
 				if(channel==0){
                  media_info.frame_rate = kFrameRate;
 				}
-				XMLogW("[vdec error][record storage] in XM_UI_START_STORAGE, channel[%d]:(%d,%d, %d) \n", channel, media_info.width, media_info.height, media_info.bit_rate);
+				//XMLogW("[vdec error][record storage] in XM_UI_START_STORAGE, channel[%d]:(%d,%d, %d) \n", channel, media_info.width, media_info.height, media_info.bit_rate);
 				XM_Middleware_Storage_SetMediaInfo(channel, &media_info);
 				XM_Middleware_Storage_Start(channel, 0);
 			}

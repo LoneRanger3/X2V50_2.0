@@ -188,7 +188,7 @@ bool VideoDecUnit::SendFrame(long handle, XM_MW_Media_Frame* media_frame)
 	if (ret != 0) {
 		
 		XMLogW("dec playback frame error, ret=%x", ret);
-     	XMLogW("[vdec error][playback] in SendFrame, dec playback frame error, ret = %d \n", ret);
+     	//XMLogW("[vdec error][playback] in SendFrame, dec playback frame error, ret = %d \n", ret);
 	}
 	return ret == 0 ? true : false;
 }
