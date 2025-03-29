@@ -502,7 +502,7 @@ static uint32_t keypad_get_key(void)
     if (key == KEYMAP_LOCK) {
         GlobalPage::Instance()->page_main()->LockCurrentFile();
     }
-	
+
     //时间页面按键操作
     if (GlobalPage::Instance()->page_sys_set()->time_page_) {
         return GlobalPage::Instance()->page_sys_set()->ChangeTime(key);
@@ -560,18 +560,13 @@ static uint32_t keypad_get_key(void)
         }
         return key;
     }
-	XMLogW("[Function_bar][GetKeyValue] 1, key = %d, ui_mode = %d \n", key, GlobalData::Instance()->UI_mode_);
-	XMLogW("[Function_bar][GetKeyValue] 2, has_flag = %d, bar_flag = %d \n", !lv_obj_has_flag(GlobalPage::Instance()->page_main()->main_page_, LV_OBJ_FLAG_HIDDEN), !GlobalPage::Instance()->page_main()->Function_bar_flag);
 
     //录像和拍照模式按键操作
     GlobalPage::Instance()->page_main()->Function_bar_cnt = 0;
     if (!lv_obj_has_flag(GlobalPage::Instance()->page_main()->main_page_, LV_OBJ_FLAG_HIDDEN) && !GlobalPage::Instance()->page_main()->Function_bar_flag) {
-		
-	    XMLogW("[Function_bar][GetKeyValue] 3, before Function_bar \n");
         GlobalPage::Instance()->page_main()->Function_bar(true);
         return 0;
     }
-	
     if (key == KEYMAP_DOWN) {
         if (!lv_obj_has_flag(GlobalPage::Instance()->page_main()->main_page_, LV_OBJ_FLAG_HIDDEN)) {
             GlobalPage::Instance()->page_sys_set()->SwitchCamera(KEYMAP_UP);

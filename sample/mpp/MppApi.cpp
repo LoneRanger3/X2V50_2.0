@@ -5,11 +5,9 @@ int XM_Middleware_Mpp_StartPlayback(CUR_PLAY_STATUS play_status,
 {
     return MppMdl::Instance()->StartPlayback(play_status, codec_type, display_region, audio_only, height);
 }
-	
-#include "Log.h"
+
 int XM_Middleware_Mpp_SendDecFrame(long handle, XM_MW_Media_Frame * media_frame)
 {
-	//XMLogW("[vdec error][playback] in XM_Middleware_Mpp_SendDecFrame \n");
     return MppMdl::Instance()->SendDecFrame(handle, media_frame);
 }
 

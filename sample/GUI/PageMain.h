@@ -75,7 +75,6 @@ public:
 	void AppMenuValue(void);
 	void Remaining_update_time();
     void Function_bar(bool flag);
-	
 private:
 	void CreatePage();
 	void CompactRecord();

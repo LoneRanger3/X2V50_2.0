@@ -1636,7 +1636,7 @@ void PageSysSet::OpenWifiSetPage()
     lv_obj_set_style_text_font(page, lv_font_all, 0);
 	lv_obj_add_style(page, &GlobalPage::Instance()->page_set()->subpage_style_, 0);
 	lv_obj_add_event_cb(page, DeletedEvent, LV_EVENT_DELETE, NULL);
-	lv_obj_align(page, LV_ALIGN_TOP_MID, 0, size_h(50) + start_y);//50
+	lv_obj_align(page, LV_ALIGN_TOP_MID, 0, size_h(50) + start_y);
 	lv_obj_set_scrollbar_mode(page, LV_SCROLLBAR_MODE_OFF);
 
 	lv_obj_t* qr_img = lv_img_create(page);
@@ -1658,8 +1658,6 @@ void PageSysSet::OpenWifiSetPage()
 	char text1[128] = { 0 };
 	memset(text1, 0, sizeof(text1));
 	sprintf(text1, "%s:%s", GetParsedString("WiFi password"), param.password);
-	
-	XMLogW("[wifi open] in OpenWifiSetPage, text=%s, text1=%s \r\n", text, text1);
 	lv_obj_t* label1 = lv_label_create(page);
 	lv_label_set_text(label1, text1);
 	lv_obj_align_to(label1, label, LV_ALIGN_OUT_BOTTOM_LEFT, 0, size_h(10));

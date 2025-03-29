@@ -76,9 +76,6 @@ const int kSubStreamHeight =480; //480;
 const int kSubStreambit_rate = 2048;
 const int kSubStreamframe_rate = 15;
 
-//#define OSD_TIME_ADJUST_Y 0
-//#define OSD_GPS_ADJUST_Y  420
-
 #endif
 
 #elif defined SUPPORT_3K
@@ -219,8 +216,6 @@ bool MppMdl::SendDecFrame(long handle, XM_MW_Media_Frame* media_frame)
 				return true;
 			}
         }
-		
-	    //XMLogW("[vdec error][playback] before SendFrame, ret = %d \n", ret);
 		ret =vdec_proc_->SendFrame(handle, media_frame);
 	}
 	return ret;
@@ -1546,7 +1541,7 @@ int MppMdl::SetOsdTitle(RGN_HANDLE Handle, int nChannel, const SystemTime& sys_t
 	OSDSetNum(osd_show_buf_, 11, pos++, num_count, sub);//fenge
 	//月
 	#if OSD_SYMBOL_TEST
-	OSDSetNum(osd_show_buf_, count_sec, pos++, num_count, sub);//fenge
+	OSDSetNum(osd_show_buf_, count_sec, pos++, num_count, sub);
 	#else
 	memset(str_date, 0, sizeof(str_date));
 	sprintf(str_date, "%02d", sys_time.month);
@@ -2190,8 +2185,6 @@ int Anti_Aliasing_downscale2(int s_w, int s_h, int d_w, int d_h, unsigned char *
 		}
 	}
 	
-	//XMLogW("[juchi] in Anti_Aliasing_downscale, ptr_y=%d, ptr_uv=%d \n", ptr_y, ptr_uv);
-	
 	return 0;
 }
 
@@ -2284,7 +2277,6 @@ int video_downscale(VIDEO_FRAME_INFO_S *src_frame, VIDEO_FRAME_INFO_S *dst_frame
 		}
 	}
 
-	//XMLogW("[juchi] in video_downscale 2, before Anti_Aliasing_downscale, mirror=%d \n", !mirror);
 	Anti_Aliasing_downscale(s_w, s_h, d_w, d_h, s_y_addr, d_y_addr, 0, !mirror);
 
 	XM_MPI_SYS_MmzFlushCache(d_phy_addr, d_y_addr, d_w * d_h * 3 / 2);
@@ -2316,7 +2308,6 @@ int video_downscale(VIDEO_FRAME_INFO_S *src_frame, VIDEO_FRAME_INFO_S *dst_frame
 	s_phy_addr = src_frame->stVFrame.u32PhyAddr[0];
 	s_y_addr = (unsigned char *)XM_MPI_SYS_Mmap_Cached(s_phy_addr, s_w * s_h * 3 / 2);
 	s_uv_addr = s_y_addr + s_w * s_h;
-	//XMLogW("[juchi] in video_downscale 1, mirror=%d \n", mirror);
 
 	int d_h_realy = d_h == 360 ? 368 : d_h;
 	d_phy_addr = dst_frame->stVFrame.u32PhyAddr[0];
@@ -2383,8 +2374,6 @@ int video_downscale(VIDEO_FRAME_INFO_S *src_frame, VIDEO_FRAME_INFO_S *dst_frame
 		}
 	}
 
-	//XMLogW("[juchi] in video_downscale 2, before Anti_Aliasing_downscale, mirror=%d \n", mirror);
-	//Anti_Aliasing_downscale(s_w, s_h, d_w, d_h, s_y_addr, d_y_addr, 0, mirror);
 	Anti_Aliasing_downscale2(s_w, s_h, d_w, d_h, s_y_addr, d_y_addr, 0, mirror);
 
 	XM_MPI_SYS_MmzFlushCache(d_phy_addr, d_y_addr, d_w * d_h * 3 / 2);
@@ -2406,11 +2395,7 @@ int MppMdl::SoftVoProc()
 	while (!thread_vi_exit_) {
 		int get_frame_ret = 1;
 		if (play_status_ == PLAY_PREVIEW) {
-			
-		    //XMLogW("[juchi] in SoftVoProc, PLAY_PREVIEW 1\n");
 			if (AdLoss()) {
-				
-		        //XMLogW("[juchi] in SoftVoProc, PLAY_PREVIEW 2, AdLoss \n");
 				//后拉视频丢失
 				if (last_play_mode_ == XM_PLAY_BOTH || last_play_mode_ == XM_PLAY_AD) {
 					//前录全屏显示
@@ -2427,8 +2412,6 @@ int MppMdl::SoftVoProc()
 				usleep(10000);
 				continue;
 			} else {
-				
-			    //XMLogW("[juchi] in SoftVoProc, PLAY_PREVIEW 3, AdLoss else \n");
 				int64_t now = GetTickTime();
 				//延迟800毫秒再回调ad丢失，规避屏显花问题
 				if (ad_loss_time_ > 0 && now > ad_loss_time_+800) {
@@ -2485,15 +2468,8 @@ int MppMdl::SoftVoProc()
 						XMLogE("XM_MPI_VO_GetEmptyFrame error, ret=%x", ret);
 					}
 					else {
-						
-					    //XMLogW("[juchi] in SoftVoProc, PLAY_PREVIEW 1, before video_downscale, ret=%x \n", ret);
-					#if 0
-    					video_downscale(&frame, &vo_frame, 
-    						(mirror_[1] == XM_MIRROR_VENC));
-					#else
 						video_downscale(&frame, &vo_frame, 
 							(mirror_[1] == XM_MIRROR_VO || mirror_[1] == XM_MIRROR_VENC));
-					#endif
 						XM_MPI_VO_SendFrame(VoLayer_, ad_chn, &vo_frame, 1000);
 					}
 				}
@@ -2527,8 +2503,6 @@ int MppMdl::SoftVoProc()
 		} else if (play_status_ == PLAY_PLAYBACK_VOD || play_status_ == PLAY_PLAYBACK_PICTURE) {
 			int dev_id = play_status_ == PLAY_PLAYBACK_VOD ? kVodDecDev : kPicDecDev;
 			mutex_vdec_.lock();
-			
-			//XMLogW("[juchi] in SoftVoProc, PLAY_PLAYBACK_VOD 1, play_status_ = %d \n", play_status_);
 			if (vdec_) {
 				get_frame_ret = XM_MPI_VDEC_GetChnFrame(dev_id, 0, &frame, 200);
 				if (get_frame_ret == 0) {
@@ -2542,12 +2516,9 @@ int MppMdl::SoftVoProc()
 					int ret = XM_MPI_VO_GetEmptyFrame(VoLayer_, vo_chn_full, &vo_frame, 1000);
 					if (ret != XM_SUCCESS) {
 						XMLogE("XM_MPI_VO_GetEmptyFrame error, ret=%x", ret);
-					    //XMLogW("[juchi] in SoftVoProc, PLAY_PLAYBACK_VOD 2, ret=%x \n", ret);
 					}
 					else {
 						int64_t t1 = GetTickTime();
-						
-					    //XMLogW("[juchi] in SoftVoProc, PLAY_PLAYBACK_VOD 1, before video_downscale, ret=%x \n", ret);
 						video_downscale(&frame, &vo_frame, false);
 						int64_t t2 = GetTickTime();
 						//XMLogI("video_downscale, time spend %lldms", t2-t1);

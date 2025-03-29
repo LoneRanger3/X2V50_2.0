@@ -136,8 +136,6 @@ bool VideoDecUnit::SendFrame(long handle, XM_MW_Media_Frame* media_frame)
 	int ret = 0;
 	if (media_frame->codec_type == PT_H264 || media_frame->codec_type == PT_H265) {
 		ret = XM_MPI_VDEC_SendStream(kVodDecDev, &dec_stream, 0);
-		
-	    //XMLogW("[vdec error][playback] in SendFrame, ret = %d \n", ret);
 	}
 	else if (media_frame->codec_type == PT_BUTT) {
 		VIDEO_FRAME_INFO_S stVideoFrame;
@@ -186,9 +184,7 @@ bool VideoDecUnit::SendFrame(long handle, XM_MW_Media_Frame* media_frame)
 		return true;
 	}
 	if (ret != 0) {
-		
 		XMLogW("dec playback frame error, ret=%x", ret);
-     	//XMLogW("[vdec error][playback] in SendFrame, dec playback frame error, ret = %d \n", ret);
 	}
 	return ret == 0 ? true : false;
 }

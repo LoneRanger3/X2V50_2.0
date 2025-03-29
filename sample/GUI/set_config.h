@@ -155,7 +155,7 @@ const XM_CONFIG_UNIT CFG_ALL_OPERATION_UNITS[] =
 	{ CFG_Operation_Lcd_Light,			    "",		"lcd_light",			CFG_Operation_Value_Int,	60},
 	{ CFG_Operation_Language,				"",		"language",				CFG_Operation_Value_Int,	English},//  English  SimpChinese TradChinese
 	{ CFG_Operation_Key_Voice,				"",		"key_voice",			CFG_Operation_Value_Bool,	true},
-	{ CFG_Operation_boot_Voice,				"",		"boot_voice",			CFG_Operation_Value_Int,	Volume_Mid},//Volume_Mid
+	{ CFG_Operation_boot_Voice,				"",		"boot_voice",			CFG_Operation_Value_Int,	Volume_Mid},//Volume_High
 	{ CFG_Operation_Acc_Power_Supply,		"",		"acc_power_supply",		CFG_Operation_Value_Bool,	true},
 	{ CFG_Operation_Voice_Control,		    "",		"Voice_Control",		CFG_Operation_Value_Bool,	false},// false true
 	{ CFG_Operation_AutoShutdown_Time,			"",	"AutoShutdown_Time",	CFG_Operation_Value_Int,	0},
@@ -175,7 +175,7 @@ const XM_CONFIG_UNIT CFG_ALL_OPERATION_UNITS[] =
 	{ CFG_Operation_Compact_Record_Fps,			"",		"Compact_Record_Fps",			CFG_Operation_Value_Int,	0},
 	{ CFG_Operation_Compact_Record_Duration,	"",		"Compact_Record_Duration",		CFG_Operation_Value_Int,	0},
     #if X2V50_2_PRODUCT_TEST
-	{ CFG_Operation_Collision_Sensitivity,		"",		"Collision_Sensitivity",		CFG_Operation_Value_Int,	Sensitivity_Mid}, //Sensitivity_Low  Sensitivity_Mid
+	{ CFG_Operation_Collision_Sensitivity,		"",		"Collision_Sensitivity",		CFG_Operation_Value_Int,	Sensitivity_Mid},
 	#else
 	{ CFG_Operation_Collision_Sensitivity,		"",		"Collision_Sensitivity",		CFG_Operation_Value_Int,	Sensitivity_Close},
 	#endif

@@ -12,8 +12,14 @@
 
 #define OSDWidth_LOGO	320//水印LOGO图片的宽度
 #define OSDHeight_LOGO	64//水印LOGO图片的高度
+#if 1
+#define OSDWidth	32//GPS水印图片的宽度
+#define OSDHeight	48//GPS水印图片的高度
+#else
 #define OSDWidth	32//GPS水印图片的宽度
 #define OSDHeight	64//GPS水印图片的高度
+#endif
+
 #define R_Width     1920
 #define R_Heigth    1080
 
@@ -102,7 +108,7 @@ static const char* osd_num_path[OSDToalNim+1] = {
 	"/mnt/custom/Pic/osdgth.rgb",  //'!'	
 	"/mnt/custom/Pic/osdxg.rgb",  //'/'
 	"/mnt/custom/Pic/osdfh.rgb",  //':'
-	"/mnt/custom/Pic/osdhg.rgb",  //'-' 缺短横杠
+	"/mnt/custom/Pic/osdhg.rgb",  //'-'
 	"/mnt/custom/Pic/osdkg.rgb",  //' '
 	"/mnt/custom/Pic/osdbfh.rgb",  //'%'	
 	"/mnt/custom/Pic/osddzf.rgb",  //'$'
@@ -188,9 +194,6 @@ int osd_upgrade_all_data(char* str)
 	osd_upgrade_data(0,str);
 	osd_upgrade_data(1,str);
 	osd_upgrade_data(2,str);//子码流
-	//[osd_user.cpp:189][warning] [osd time] in osd_upgrade_all_data, str = E 113.856491 N 22.600519 4km/h   
-	//XMLogW("[osd time] in osd_upgrade_all_data, str = %s \r\n", str);
-	
 	return 0;
 }
 
@@ -298,9 +301,9 @@ int osd_data_init(void)
 
 #if OSD_SHOW_ADJUST
    //前路，后路，子码流时间水印
-   MppMdl::Instance()->EnableOsdTime(4,enable, osd_x, 8192*(kSubStreamHeight-60-(kSubStreamHeight/360)*8)/kSubStreamHeight + osd_time_ofs_y); //APP时间水印 + 420
+   MppMdl::Instance()->EnableOsdTime(4,enable, osd_x, 8192*(kSubStreamHeight-60-(kSubStreamHeight/360)*8)/kSubStreamHeight + osd_time_ofs_y); //APP时间水印
 #else
-   MppMdl::Instance()->EnableOsdTime(4,enable, osd_x, 8192*(kSubStreamHeight-60-(kSubStreamHeight/360)*8)/kSubStreamHeight); //APP时间水印 + 420
+   MppMdl::Instance()->EnableOsdTime(4,enable, osd_x, 8192*(kSubStreamHeight-60-(kSubStreamHeight/360)*8)/kSubStreamHeight); //APP时间水印
 #endif
 
 #if 0 //logo水印
@@ -417,6 +420,7 @@ int osd_data_init(void)
 		   osd_str_flag=cfg_value.bool_value;
 		   memset(osd_str_data,' ',OSDNum);
 		for(int k=0;k<strlen(osd_str_data);k++){
+			//int osdsetchange(char* buf, int num, int pos, int width, int sub)
 			osdsetchange(osd_infos.osd[i][j].osd_buf,getcharindex(osd_str_data[k]),k,strlen(osd_str_data),i<2?0:1);
 		}	
 		memcpy(osd_change_info[i].osd_buf,osd_infos.osd[i][j].osd_buf,osd_infos.osd[i][j].width*osd_infos.osd[i][j].height*2);	

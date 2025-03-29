@@ -623,7 +623,8 @@ void HTTPSerMdl::getFileList(int engineId, int connId, char * msg, char * connTy
     if (!record_stop) {
          XMLogW("record not stoped");
     }
- #endif 
+ #endif
+ 
     char* pbegin = strstr(msg, "?");
     if (pbegin == NULL) {
         cJSON* info = cJSON_CreateArray();

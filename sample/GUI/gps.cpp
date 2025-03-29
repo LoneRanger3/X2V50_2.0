@@ -25,7 +25,7 @@
 #define SIX_APP 1// 1--匹配6侦探
 #define COMPAT_PC// 兼容PC工具
 #define BUF_DATA_LEN_MAX       4096
-//#define SIMUlonION_GPS //模拟GPS数据
+#define SIMUlonION_GPS //模拟GPS数据
 #define GPS_DATA_NUM 600//需要大于或等于循环录像最长时长
 
 static unsigned char gps_data_buf[BUF_DATA_LEN_MAX] ={0};
@@ -806,9 +806,6 @@ int gps_snr_sort()//信噪比数据处理
 #endif
 
 #if 1//选择前n个有效数据保存，若不需要则写0
-//	static int wr_count = 0;
-//	wr_count++;
-
     if(data_len_){
         for (j=0,i=0;i<LEN;i++){
             if(!_SNR_[i]){
@@ -975,7 +972,6 @@ int gps_data_rmc(char *gps_data_frame,struct rmc *_rmc_)
 
    #if 1//X2V60_S_DEBUG1
    		clean_gps_osd_flag = 1;
-   		//XMLogI("[gps parse] in gps_data_rmc, 111111111 gps_online_flag:%d \r\n", gps_online_flag);
    	
        #if 1//OSD_SHOW_ADJUST
    		if(gps_online_old_flag != gps_online_flag){
@@ -990,7 +986,7 @@ int gps_data_rmc(char *gps_data_frame,struct rmc *_rmc_)
                 if(cfg_value.bool_value){
 					
    				    osd_time_ofs_y = OSD_TIME_ADJUST_Y;
-   				    MppMdl::Instance()->EnableOsdTime(4,1, 128, 8192*(kSubStreamHeight-60-(kSubStreamHeight/360)*8)/kSubStreamHeight + osd_time_ofs_y); //APP时间水印  + 700
+   				    MppMdl::Instance()->EnableOsdTime(4,1, 128, 8192*(kSubStreamHeight-60-(kSubStreamHeight/360)*8)/kSubStreamHeight + osd_time_ofs_y);
    				}
    			}
    		}
@@ -1001,7 +997,6 @@ int gps_data_rmc(char *gps_data_frame,struct rmc *_rmc_)
 		gps_online_old_flag = 0;
 
 #if 1//X2V60_S_DEBUG1
-		//XMLogI("[gps parse] in gps_data_rmc else, 2222222222 gps_online_flag:%d \r\n", gps_online_flag);
 		if(last_clean_gps_osd_flag!=clean_gps_osd_flag){
 			
 			if(clean_gps_osd_flag){
@@ -1012,7 +1007,7 @@ int gps_data_rmc(char *gps_data_frame,struct rmc *_rmc_)
         #if 1//OSD_SHOW_ADJUST
 				osd_time_ofs_y = OSD_GPS_ADJUST_Y;
 				clean_gps_osd_data(0);
-				MppMdl::Instance()->EnableOsdTime(4,1, 128, 8192*(kSubStreamHeight-60-(kSubStreamHeight/360)*8)/kSubStreamHeight + osd_time_ofs_y); //APP时间水印  + 700
+				MppMdl::Instance()->EnableOsdTime(4,1, 128, 8192*(kSubStreamHeight-60-(kSubStreamHeight/360)*8)/kSubStreamHeight + osd_time_ofs_y);
 		#else
 				clean_gps_osd_data(0);
         #endif
@@ -1020,7 +1015,6 @@ int gps_data_rmc(char *gps_data_frame,struct rmc *_rmc_)
 			}
 		}
 #endif
-
 		
     }
 

@@ -26,8 +26,14 @@
 #include "XMThread.h"
 #include "VideoDecUnit.h"
 
+#if 1
+#define kOSDWidth	32//
+#define kOSDHeight	48//
+#else
 const int kOSDWidth = 32;
 const int kOSDHeight = 64;
+#endif
+
 const int kMaxTargetNum = 16;
 const int kThumbnailWidth = 320;
 const int kThumbnailHeight = 240;

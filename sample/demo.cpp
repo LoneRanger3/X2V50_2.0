@@ -969,25 +969,7 @@ int ProcessEvent(long handle, XMEventType event_type, const std::string& msg, in
 			if (ret < 0) {
 				XMLogE("set config error, opr=CFG_Operation_Video_Resolution");
 			}
-			
-#if 0//OSD_SHOW_ADJUST
-			if(osd_time_ofs_y == 0){
-				
-				osd_time_ofs_y = 420;
-//				osd_data_init();
-//				clean_gps_osd_data(0);
-
-			}else{
-			
-				osd_time_ofs_y = 0;
-			}
-			
-			MppMdl::Instance()->EnableOsdTime(4,1, 128, 8192*(kSubStreamHeight-60-(kSubStreamHeight/360)*8)/kSubStreamHeight + osd_time_ofs_y); //APP时间水印  + 700
-			
-#else
 			osd_data_init();
-#endif
-			
 			if(g_app_connect){
 			  MppMdl::Instance()->SubStreamEnable(true);
 			}
@@ -1298,7 +1280,6 @@ int OnUIEventCallback(XMUIEventType ui_event_type, XMUIEventInParam* in_param, X
 				if(channel==0){
                  media_info.frame_rate = kFrameRate;
 				}
-				//XMLogW("[vdec error][record storage] in XM_UI_START_STORAGE, channel[%d]:(%d,%d, %d) \n", channel, media_info.width, media_info.height, media_info.bit_rate);
 				XM_Middleware_Storage_SetMediaInfo(channel, &media_info);
 				XM_Middleware_Storage_Start(channel, 0);
 			}

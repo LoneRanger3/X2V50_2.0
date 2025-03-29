@@ -144,10 +144,10 @@ void PageMain::CreatePage()
 
     wifi_img_ = lv_img_create(main_page_);
     if (cfg_value.int_value == 1) {
-        lv_img_set_src(wifi_img_, image_path"0wifi.png");//wifi_set_off- 0wifi
+        lv_img_set_src(wifi_img_, image_path"0wifi.png");
     }
     else {
-        lv_img_set_src(wifi_img_, image_path"no_wifi.png");//no_wifi wifi_set_off
+        lv_img_set_src(wifi_img_, image_path"no_wifi.png");
     }
     lv_obj_align_to(wifi_img_, mic_record_img_, LV_ALIGN_OUT_LEFT_MID, size_w(0), -size_h(2));
     lv_obj_add_flag(wifi_img_, LV_OBJ_FLAG_CLICKABLE);
@@ -223,32 +223,6 @@ void PageMain::CreatePage()
 	// lv_img_set_src(x2_logo_img_, image_path"Safe_cam.png");
 	// lv_obj_align(x2_logo_img_, LV_ALIGN_BOTTOM_LEFT, size_w(10), -size_h(0));
 
-#if 0//生产测试录像页面显示wifi名称和密码
-
-    WIFI_MAC_PARAM_S param;
-    memset(param.ssid, 0, sizeof(param.ssid));
-    memset(param.password, 0, sizeof(param.password));
-    XM_Middleware_WIFI_GetMacParam(&param);
-    
-    char text[128] = { 0 };
-    memset(text, 0, sizeof(text));
-    sprintf(text, "%s:%s", GetParsedString("WiFi name"), param.ssid);
-    lv_obj_t* label = lv_label_create(main_page_);
-    lv_label_set_text(label, text);
-    //lv_obj_align_to(label, qr_img, LV_ALIGN_OUT_RIGHT_MID, size_w(10), -size_h(10));
-    lv_obj_align(label, LV_ALIGN_BOTTOM_LEFT, size_w(50), -size_h(45));
-    
-    char text1[128] = { 0 };
-    memset(text1, 0, sizeof(text1));
-    sprintf(text1, "%s:%s", GetParsedString("WiFi password"), param.password);
-	
-	XMLogW("[wifi open] in CreatePage, text=%s, text1=%s \r\n", text, text1);
-    lv_obj_t* label1 = lv_label_create(main_page_);
-    lv_label_set_text(label1, text1);
-    //lv_obj_align_to(label1, label, LV_ALIGN_OUT_BOTTOM_LEFT, 0, size_h(10));
-    lv_obj_align(label1, LV_ALIGN_BOTTOM_LEFT, size_w(50), -size_h(30));
-#endif
-
 	//开机开启录像
 	collision_startup_ = PeripheryManager::Instance()->GsensorCheck(); 
 	XMLogI("GsensorCheck collision_startup_=%d", collision_startup_);
@@ -293,15 +267,13 @@ void PageMain::Function_bar(bool flag)
 {
     static bool init_flag = true;
     XM_CONFIG_VALUE cfg_value;
-	XMLogW("[Function_bar] in bar 1, init_flag = %d \n", init_flag);
-	
     if (init_flag) {
          init_flag = false;
     
          Function_page_ = lv_create_page(main_page_, screen_width, 32, lv_color_black(), 0, 0,
                 lv_font_all, lv_color_white(), 0);
         // lv_obj_set_style_bg_opa(Function_page_, 0, 0);
-         lv_obj_set_pos(Function_page_, 0, 208);//
+         lv_obj_set_pos(Function_page_, 0, 208);
 
          lv_obj_t* power_img_= lv_img_create(Function_page_);
          lv_img_set_src(power_img_, image_path"power.png");
@@ -314,7 +286,6 @@ void PageMain::Function_bar(bool flag)
          record_img_ = lv_img_create(Function_page_);
          lv_img_set_src(record_img_, image_path"rec_off.png");
          lv_obj_align_to(record_img_, slash_img1_, LV_ALIGN_OUT_RIGHT_MID, -size_w(3), 0);
-		 XMLogW("[Function_bar] in bar 2, init_flag = %d \n", init_flag);
 
          set_img_ = lv_img_create(Function_page_);
          lv_img_set_src(set_img_, image_path"menu.png");
@@ -377,116 +348,18 @@ void PageMain::Function_bar(bool flag)
         lv_obj_align_to(bar_wifi_img_, slash_img4_, LV_ALIGN_OUT_RIGHT_MID, -size_w(4), size_h(0));
 #endif
     }
-
-	XMLogW("[Function_bar] in bar 3, init_flag = (%d,%d) \n", Settings_Function_bar_flag, flag);
     if (Function_bar_flag != flag) {
         if (flag) {
             lv_obj_clear_flag(Function_page_, LV_OBJ_FLAG_HIDDEN);
-    		XMLogW("[Function_bar] in bar 4 show, init_flag = (%d,%d) \n", Settings_Function_bar_flag, flag);
         }
         else {
             lv_obj_add_flag(Function_page_, LV_OBJ_FLAG_HIDDEN);
-    		XMLogW("[Function_bar] in bar 5 hidden, init_flag = (%d,%d) \n", Settings_Function_bar_flag, flag);
         }
         Function_bar_flag = flag;
-		XMLogW("[Function_bar] in bar 6, init_flag = (%d,%d) \n", Settings_Function_bar_flag, flag);
     }
 	GlobalPage::Instance()->page_main()->Function_bar_cnt = 0;
 }
 
-#if 0
-void PageMain::Settings_Function_bar(bool flag)
-{
-    static bool init_flag = true;
-    XM_CONFIG_VALUE cfg_value;
-	
-	XMLogW("[Function_bar][Settings] in bar 1, init_flag = %d \n", init_flag);
-    if (init_flag) {
-		
-         init_flag = false;
-         //lv_layer_top lv_scr_act
-         Settings_function_page_ = lv_create_page(lv_layer_top(), screen_width, 32, lv_palette_darken(LV_PALETTE_GREY, 2), 0, 0,
-                lv_font_all, lv_color_white(), 0);//lv_color_black lv_color_white
-         //lv_obj_set_style_bg_opa(Function_page_, 0, 0);
-         lv_obj_set_pos(Settings_function_page_, 0, 208);//208 
-
-         lv_obj_t* power_img_= lv_img_create(Settings_function_page_);
-         lv_img_set_src(power_img_, image_path"power.png");
-         lv_obj_align(power_img_, LV_ALIGN_BOTTOM_LEFT, size_w(0), size_h(0));
-
-         lv_obj_t* slash_img1_ = lv_img_create(Settings_function_page_);
-         lv_img_set_src(slash_img1_, image_path"slash.png");
-         lv_obj_align_to(slash_img1_, power_img_, LV_ALIGN_OUT_RIGHT_MID, -size_w(6), size_h(0));
-
-         settings_record_img_ = lv_img_create(Settings_function_page_);
-         lv_img_set_src(settings_record_img_, image_path"rec_off.png");
-         lv_obj_align_to(settings_record_img_, slash_img1_, LV_ALIGN_OUT_RIGHT_MID, -size_w(3), 0);
-		 XMLogW("[Function_bar][Settings] in bar 2, init_flag = %d \n", init_flag);
-
-         set_img_ = lv_img_create(Settings_function_page_);
-         lv_img_set_src(set_img_, image_path"menu.png");
-         lv_obj_align_to(set_img_, settings_record_img_, LV_ALIGN_OUT_RIGHT_MID, size_w(6), 0);
-
-         lv_obj_t* slash_img2_ = lv_img_create(Settings_function_page_);
-         lv_img_set_src(slash_img2_, image_path"slash.png");
-         lv_obj_align_to(slash_img2_, set_img_, LV_ALIGN_OUT_RIGHT_MID, -size_w(6), size_h(0));
-
-        photo_img_ = lv_img_create(Settings_function_page_);
-        lv_img_set_src(photo_img_, image_path"photo_on.png");
-        lv_obj_align_to(photo_img_, slash_img2_, LV_ALIGN_OUT_RIGHT_MID, -size_w(4), 0);
-
-        lock_img_ = lv_img_create(Settings_function_page_);
-        lv_img_set_src(lock_img_, image_path"lock_off.png");
-        lv_obj_align_to(lock_img_, photo_img_, LV_ALIGN_OUT_RIGHT_MID, size_w((32+LOCK_IMG_OFS_X)), 0);
-
-        lv_obj_t* switch_img_ = lv_img_create(Settings_function_page_);
-        lv_img_set_src(switch_img_, image_path"switch.png");
-        lv_obj_align_to(switch_img_, lock_img_, LV_ALIGN_OUT_RIGHT_MID, size_w((40-LOCK_IMG_OFS_X)), size_h(0));
-
-        lv_obj_t* slash_img3_ = lv_img_create(Settings_function_page_);
-        lv_img_set_src(slash_img3_, image_path"slash.png");
-        lv_obj_align_to(slash_img3_, switch_img_, LV_ALIGN_OUT_RIGHT_MID, -size_w(4), size_h(0));
-
-        silent_record_img_ = lv_img_create(Settings_function_page_);
-        cfg_value.bool_value = false;
-        GlobalData::Instance()->car_config()->GetValue(CFG_Operation_Record_Voice, cfg_value);
-        if (cfg_value.bool_value) {
-            lv_img_set_src(silent_record_img_, image_path"mic_on.png");
-        }
-        else {
-            lv_img_set_src(silent_record_img_, image_path"mic_off.png");
-        }
-        lv_obj_align_to(silent_record_img_, slash_img3_, LV_ALIGN_OUT_RIGHT_MID, -size_w(4), size_h(0));
-
-        playback_img_ = lv_img_create(Settings_function_page_);
-        lv_img_set_src(playback_img_, image_path"playback_on.png");
-        lv_obj_align_to(playback_img_, silent_record_img_, LV_ALIGN_OUT_RIGHT_MID, size_w(10), size_h(0));
-
-        lv_obj_t* slash_img4_ = lv_img_create(Settings_function_page_);
-        lv_img_set_src(slash_img4_, image_path"slash.png");
-        lv_obj_align_to(slash_img4_, playback_img_, LV_ALIGN_OUT_RIGHT_MID, -size_w(4), size_h(0));
-
-		lv_obj_t* bar_wifi_img_ = lv_img_create(Settings_function_page_);
-        lv_img_set_src(bar_wifi_img_, image_path"0wifi.png");
-        lv_obj_align_to(bar_wifi_img_, slash_img4_, LV_ALIGN_OUT_RIGHT_MID, -size_w(4), size_h(0));
-    }
-
-	XMLogW("[Function_bar][Settings] in bar 3, init_flag = (%d,%d) \n", Settings_Function_bar_flag, flag);
-    if (Settings_Function_bar_flag != flag) {
-        if (flag) {
-            lv_obj_clear_flag(Settings_function_page_, LV_OBJ_FLAG_HIDDEN);
-		    XMLogW("[Function_bar][Settings] in bar 4 show, init_flag = (%d,%d) \n", Settings_Function_bar_flag, flag);
-        }
-        else {
-            lv_obj_add_flag(Settings_function_page_, LV_OBJ_FLAG_HIDDEN);
-    		XMLogW("[Function_bar][Settings] in bar 5 hidden, init_flag = (%d,%d) \n", Settings_Function_bar_flag, flag);
-        }
-        Settings_Function_bar_flag = flag;
-		XMLogW("[Function_bar][Settings] in bar 6, init_flag = (%d,%d) \n", Settings_Function_bar_flag, flag);
-    }
-	GlobalPage::Instance()->page_main()->Settings_function_bar_cnt = 0;
-}
-#endif
 
 void PageMain::BtnEvent(lv_event_t* e)
 {
@@ -866,7 +739,6 @@ void PageMain::UpdateTime(lv_timer_t* timer)
 		}
   }
 #endif
-
 	if (object->update_time_) {
 		time_t t = time(NULL);
 		struct tm* current_time = localtime(&t);
@@ -932,23 +804,9 @@ void PageMain::UpdateTime(lv_timer_t* timer)
                         object->Function_bar_cnt++;
                         if (object->Function_bar_cnt >= 5) {
                             object->Function_bar_cnt = 0;
-							
-						    XMLogW("[Function_bar][UpdateTime] hidden 1, before Function_bar \n");
                             object->Function_bar(false);
                         }
                     }
-
-					#if 0
-                    if (object->Settings_Function_bar_flag) {
-                        object->Settings_function_bar_cnt++;
-                        if (object->Settings_function_bar_cnt >= 5) {
-                            object->Settings_function_bar_cnt = 0;
-							
-						    XMLogW("[Function_bar][UpdateTime] hidden 2, before Settings_Function_bar \n");
-                            object->Settings_Function_bar(false);
-                        }
-                    }
-					#endif
                 #endif
 			}
 
@@ -1134,7 +992,6 @@ void PageMain::StartRecord(bool compact_record)
         lv_obj_align_to(record_time_label_, record_label_, LV_ALIGN_OUT_RIGHT_MID, size_w(5), size_h(0));
 
 		lv_img_set_src(record_img_, image_path"rec_on.png");
-		XMLogW("[Function_bar][Settings] in StartRecord 6 \n");
 
 		if (compact_record) {
 			XM_Middleware_ParkRecord_Enable(true);
@@ -1150,8 +1007,6 @@ void PageMain::StartRecord(bool compact_record)
 		}
 		HTTPSerMdl::Instance()->tcpRecStatus(g_engineId, 1);
 		record_start_time_ = GetTickTime();
-		
-		//XMLogW("[vdec error][record time] before ChangeRecordTime \n");
 		record_timer_ = lv_timer_create(ChangeRecordTime, 100, NULL);
 
 		//录像时关闭自动关机功能
@@ -1209,7 +1064,6 @@ void PageMain::CloseRecord(bool compact_record)
 		record_timer_ = NULL;
 
 		lv_img_set_src(record_img_, image_path"rec_off.png");
-		XMLogW("[Function_bar][Settings] in CloseRecord \n");
 
 		record_start_time_ = 0;
 		pre_record_time_ = 0;
@@ -1254,8 +1108,6 @@ void PageMain::ClearMainPageHidden(lv_timer_t* timer)
 
 void PageMain::ChangeRecordTime(lv_timer_t* timer)
 {
-	//XMLogW("[vdec error][record time] in ChangeRecordTime 1 \n");
-
 	if (GlobalData::Instance()->UI_mode_ == UIMode_CompactRecord) {
 		int64_t start_time = GlobalPage::Instance()->page_main()->record_start_time_;
 		int64_t now = GetTickTime();
@@ -1278,15 +1130,11 @@ void PageMain::ChangeRecordTime(lv_timer_t* timer)
 	}*/
 
 	int time = XM_Middleware_Storage_GetRecordedTime(XM_STORAGE_SDCard_0, Direction_Front) / 1000;
-	
-	//XMLogW("[vdec error][record time] in ChangeRecordTime 2, time:(%d,%d) \n", time, GlobalPage::Instance()->page_main()->pre_record_time_);
 	if (GlobalPage::Instance()->page_main()->pre_record_time_ != time) {
 		GlobalPage::Instance()->page_main()->pre_record_time_ = time;
 		char buf[32] = { 0 };
 		sprintf(buf, "%02d:%02d", time / 60, time % 60);
 		lv_label_set_text(GlobalPage::Instance()->page_main()->record_time_label_, buf);
-		
-		//XMLogW("[vdec error][record time] in ChangeRecordTime , time:(%d,%d), buf: %s \n", buf);
 		//控制蓝色灯闪烁
 		GlobalPage::Instance()->page_main()->led_on_ = !GlobalPage::Instance()->page_main()->led_on_;
 		PeripheryManager::Instance()->CameraLedControl(GlobalPage::Instance()->page_main()->led_on_);
@@ -1873,7 +1721,7 @@ void PageMain::ShutDown(ShutDownMode shutdownmode, bool play_pic, bool close_pre
 		GlobalData::Instance()->ui_event_cb_(XM_UI_STOP_STORAGE, NULL, NULL);
 		//关闭预览
 		#if 1
-		lv_timer_create(ShutDownTimer_PullPowerOn, 600, (void*)shutdownmode);//350 关机噗声改1
+		lv_timer_create(ShutDownTimer_PullPowerOn, 600, (void*)shutdownmode);//350
 		#else
 		
 		shutDown(shutdownmode);

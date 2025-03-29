@@ -248,14 +248,13 @@ int CarCollisionDetect() {
 
 int SensitivityDegreeSet(int degree) {
 	XMLogI("gsensor degree=%d", degree);
-	//CarStopSensorHighSensitivity
 	switch (degree)
 	{
 	case 0:InitSensorShutDownSensitivity(); break;
 	case 1:InitSensorHighSensitivity(); break;
 	case 2:InitSensorMediumSensitivity(); break;
 	case 3:InitSensorLowSensitivity(); break;
-	case 4: CarStopSensorHighSensitivity(); break;//CarStopSensorMediumSensitivity CarStopSensorHighSensitivity
+	case 4: CarStopSensorHighSensitivity(); break;
 	default:XMLogE("Set gsensor level error");
 		break;
 	}
