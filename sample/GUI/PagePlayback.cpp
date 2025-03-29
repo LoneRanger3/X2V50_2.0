@@ -151,6 +151,10 @@ void PagePlayback::CreatePage()
 	else {
 		lv_obj_set_style_bg_opa(playback_page_, 0, 0);
 	}
+
+#if 1
+    GlobalPage::Instance()->page_set()->Createfunction_bar(playback_page_,23,0,true,true);
+#endif
 }
 
 void PagePlayback::BtnEvent(lv_event_t* e)
@@ -225,8 +229,8 @@ void PagePlayback::OpenSetPage()
     lv_label_set_text(title_label_, GetParsedString("Set"));
     lv_obj_align(title_label_, LV_ALIGN_CENTER, 0, size_h(3));
 
-    lv_obj_t* menu_list_ = lv_create_page(video_set_page_, screen_width, size_h(190),
-        lv_color_make(16, 16, 16), 0, 0, lv_font_all, lv_color_white(), 0);
+    lv_obj_t* menu_list_ = lv_create_page(video_set_page_, screen_width, size_h(154),
+        lv_color_make(16, 16, 16), 0, 0, lv_font_all, lv_color_white(), 0);//190 154
     lv_obj_align(menu_list_, LV_ALIGN_TOP_MID, size_w(0), size_h(48));
     lv_obj_add_flag(menu_list_, LV_OBJ_FLAG_SCROLLABLE);
 
@@ -235,8 +239,8 @@ void PagePlayback::OpenSetPage()
 	 GetParsedString("Lock all"), GetParsedString("Unlock all"),
 	 /*GetParsedString("Main interface"), GetParsedString("Return")*/ };
 	for (int i = 0;i < PlaybackSubpage_Total;i++) {
-        set_btn_[i] = lv_create_btn(menu_list_, 320, 46, lv_color_make(68, 68, 68), 2,
-            OpenSubpage, LV_EVENT_ALL, (void*)i, 0);
+        set_btn_[i] = lv_create_btn(menu_list_, 320, 37, lv_color_make(68, 68, 68), 2,
+            OpenSubpage, LV_EVENT_ALL, (void*)i, 0);//46 37
         lv_obj_remove_style(set_btn_[i], NULL, LV_STATE_FOCUS_KEY);
         if (i == PlaybackSubpage_DelCur) {
             lv_obj_align(set_btn_[i], LV_ALIGN_TOP_LEFT, size_w(0), size_h(0));
@@ -254,6 +258,10 @@ void PagePlayback::OpenSetPage()
 
      SelectFileStyle(menu_list_, screen_width, size_h(190));
 	lv_group_focus_next(GlobalData::Instance()->group);
+
+#if 1
+	GlobalPage::Instance()->page_set()->Createfunction_bar(video_set_page_,35,7,true,false);
+#endif
 }
 
 void PagePlayback::DelSetPageEvent(lv_event_t* e)
@@ -955,8 +963,8 @@ void PagePlayback::OpenSelectFilePage()
     lv_label_set_text(title_label_, GetParsedString("File management"));
     lv_obj_align(title_label_, LV_ALIGN_CENTER, 0, size_h(3));
 
-    lv_obj_t *filetype_list_ = lv_create_page(select_filetype_page_, screen_width, size_h(190),
-        lv_color_make(16, 16, 16), 0, 0, lv_font_all, lv_color_white(), 0);
+    lv_obj_t *filetype_list_ = lv_create_page(select_filetype_page_, screen_width, size_h(160),
+        lv_color_make(16, 16, 16), 0, 0, lv_font_all, lv_color_white(), 0);//190 160
     lv_obj_align(filetype_list_, LV_ALIGN_TOP_MID, size_w(0), size_h(48));
     lv_obj_add_flag(filetype_list_, LV_OBJ_FLAG_SCROLLABLE);
 
@@ -965,8 +973,8 @@ void PagePlayback::OpenSelectFilePage()
 	GetParsedString("Posterior photos")/*, GetParsedString("Return")*/ };
 	lv_obj_t* label = NULL;
 	for (int i = 0;i < FileType_Total;i++) {
-        filetype_img_[i] = lv_create_btn(filetype_list_, 320, 46, lv_color_make(68, 68, 68), 2,
-            SelectFileTypeEvent, LV_EVENT_ALL, (void*)i, 0);
+        filetype_img_[i] = lv_create_btn(filetype_list_, 320, 37, lv_color_make(68, 68, 68), 2,
+            SelectFileTypeEvent, LV_EVENT_ALL, (void*)i, 0);//46 38
         lv_obj_remove_style(filetype_img_[i], NULL, LV_STATE_FOCUS_KEY);
 		if (i == FileType_FrontVideo) {
 			lv_obj_align(filetype_img_[i], LV_ALIGN_TOP_LEFT, size_w(0), size_h(0));
@@ -982,6 +990,10 @@ void PagePlayback::OpenSelectFilePage()
         lv_obj_align(label, LV_ALIGN_TOP_LEFT, size_h(20), size_h(3));
 	}
     SelectFileStyle(filetype_list_, screen_width, size_h(190));
+
+#if 1
+    GlobalPage::Instance()->page_set()->Createfunction_bar(select_filetype_page_,36,7,true,false);
+#endif
 }
 
 void PagePlayback::DelSelectFilePageEvent(lv_event_t* e)

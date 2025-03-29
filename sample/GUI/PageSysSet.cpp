@@ -639,24 +639,30 @@ void PageSysSet::OpenFormatPage()
 	 lv_obj_set_style_text_font(page, lv_font_all, 0);
 	lv_obj_add_style(page, &GlobalPage::Instance()->page_set()->subpage_style_, 0);
 	lv_obj_add_event_cb(page, DeletedEvent, LV_EVENT_DELETE, NULL);
-	lv_obj_align(page, LV_ALIGN_TOP_MID, 0, size_h(48) + start_y);
+	lv_obj_align(page, LV_ALIGN_TOP_MID, 0, size_h(42) + start_y);//48
 	 lv_obj_set_style_bg_color(page, lv_color_make(68, 68, 68), 0);
     lv_obj_clear_flag(page, LV_OBJ_FLAG_SCROLLABLE);
 	lv_obj_t* label = lv_create_label(page, subpage_width_,
 		GetParsedString("Formatting will delete all data of the memory card"), LV_TEXT_ALIGN_CENTER, 0);
-	lv_obj_align(label, LV_ALIGN_TOP_MID, 0, size_h(10));
+	lv_obj_align(label, LV_ALIGN_TOP_MID, 0, size_h(8));//10
 
 	lv_obj_t* list = lv_list_create(page);
 	lv_obj_t* btn = lv_list_chile_btn(list, NULL, GetParsedString("Cancel"));
+    lv_obj_set_size(btn, LV_PCT(100), 43);//46 30
 	lv_obj_add_event_cb(btn, FormatSD, LV_EVENT_ALL, (void*)Btn_No);
 
 	btn = lv_list_chile_btn(list, NULL, GetParsedString("Confirm"));
+    lv_obj_set_size(btn, LV_PCT(100), 43);//46 30
 	lv_obj_add_event_cb(btn, FormatSD, LV_EVENT_ALL, (void*)Btn_Yes);
 
 	GlobalPage::Instance()->page_main()->SetListStyle(list, subpage_width_, subpage_height_);
 	lv_obj_align_to(list, label, LV_ALIGN_OUT_BOTTOM_MID, 0, size_h(10));
 
 	GlobalData::Instance()->opened_subpage_[0] = page;
+
+	#if 1
+	GlobalPage::Instance()->page_set()->Createfunction_bar(page,36,7,true,false);
+	#endif
 }
 
 void PageSysSet::OpenFormatTipWin()
@@ -850,7 +856,7 @@ void PageSysSet::OpenDefaultSetPage()
     lv_obj_set_style_text_font(page, lv_font_all, 0);
 	lv_obj_add_style(page, &GlobalPage::Instance()->page_set()->subpage_style_, 0);
 	lv_obj_add_event_cb(page, DeletedEvent, LV_EVENT_DELETE, NULL);
-	lv_obj_align(page, LV_ALIGN_TOP_MID, 0, size_h(48) + start_y);
+	lv_obj_align(page, LV_ALIGN_TOP_MID, 0, size_h(42) + start_y);//48 42
 	 lv_obj_set_style_bg_color(page, lv_color_make(68, 68, 68), 0);
     lv_obj_clear_flag(page, LV_OBJ_FLAG_SCROLLABLE);
 	lv_obj_t* label = lv_create_label(page, subpage_width_,
@@ -859,15 +865,21 @@ void PageSysSet::OpenDefaultSetPage()
 
 	lv_obj_t* list = lv_list_create(page);
 	lv_obj_t* btn = lv_list_chile_btn(list, NULL, GetParsedString("Cancel"));
+    lv_obj_set_size(btn, LV_PCT(100), 46);//46 30
 	lv_obj_add_event_cb(btn, RestoreDefaultSetEvent, LV_EVENT_ALL, (void*)Btn_No);
 
 	btn = lv_list_chile_btn(list, NULL, GetParsedString("Confirm"));
+    lv_obj_set_size(btn, LV_PCT(100), 46);//46 30
 	lv_obj_add_event_cb(btn, RestoreDefaultSetEvent, LV_EVENT_ALL, (void*)Btn_Yes);
 
 	GlobalPage::Instance()->page_main()->SetListStyle(list, subpage_width_, subpage_height_);
 	lv_obj_align_to(list, label, LV_ALIGN_OUT_BOTTOM_MID, 0, size_h(20));
 
 	GlobalData::Instance()->opened_subpage_[0] = page;
+
+#if 1
+	GlobalPage::Instance()->page_set()->Createfunction_bar(page,36,7,true,false);
+#endif
 }
 
 void PageSysSet::RestoreDefaultSetEvent(lv_event_t* e)
@@ -1136,7 +1148,11 @@ void PageSysSet::OpenEditionPage()
 
 	lv_obj_t* label = lv_create_label(page, subpage_width_,
 		GlobalData::Instance()->version().c_str(), LV_TEXT_ALIGN_CENTER, 0);
+	#if X2V50_PROJ_DEBUG
+	lv_obj_align(label, LV_ALIGN_CENTER, 0, size_h(0));
+	#else
 	lv_obj_align(label, LV_ALIGN_TOP_MID, 0, size_h(130));
+	#endif
 	lv_group_add_obj(GlobalData::Instance()->group, label);
 
 	GlobalData::Instance()->opened_subpage_[0] = page;
@@ -1645,13 +1661,13 @@ void PageSysSet::OpenWifiSetPage()
 	lv_obj_t* label1 = lv_label_create(page);
 	lv_label_set_text(label1, text1);
 	lv_obj_align_to(label1, label, LV_ALIGN_OUT_BOTTOM_LEFT, 0, size_h(10));
-#if SEVEN_KEYS
+#if 0//SEVEN_KEYS //X2V50_PROJ_DEBUG
   if(!GlobalPage::Instance()->page_main()->touch_plan){
 	lv_obj_t* label2 = lv_label_create(page);
 	lv_label_set_text(label2, GetParsedString("Recording mode, down key to control WiFi switch"));
-	lv_obj_align_to(label2, GlobalPage::Instance()->page_set()->title_label_, LV_ALIGN_OUT_BOTTOM_MID, -size_w(0), size_h(200));
+	lv_obj_align_to(label2, GlobalPage::Instance()->page_set()->title_label_, LV_ALIGN_OUT_BOTTOM_MID, -size_w(0), size_h(150));//200
   }
- #endif 
+#endif
 	lv_obj_t* yes_btn = lv_create_btn(page, 110, 40, lv_color_make(95, 93, 93), 0, WifiEvent, LV_EVENT_ALL,
 		(void*)Btn_Yes, 0);
 	// lv_obj_set_style_border_width(yes_btn, 2, 0);
@@ -1802,6 +1818,10 @@ void PageSysSet::OpenGpsInfoPage()
     gps_info_page_ = page;
 }
 
+extern int osd_time_ofs_y;
+#include "mpp/MppMdl.h"
+#include "DemoDef.h"
+
 void PageSysSet::GpsWatermark(lv_event_t* e)
 {
     lv_event_code_t code = lv_event_get_code(e);
@@ -1817,6 +1837,21 @@ void PageSysSet::GpsWatermark(lv_event_t* e)
             XMLogE("set config error, opr=CFG_Operation_GPS_Watermark");
         }
 		osd_data_init();
+
+#if 1//OSD_SHOW_ADJUST
+        if(user_data){
+			
+		    osd_time_ofs_y = OSD_TIME_ADJUST_Y;
+
+		}else{
+		
+		    clean_gps_osd_data(0);
+			osd_time_ofs_y = OSD_GPS_ADJUST_Y;
+		}
+		
+		MppMdl::Instance()->EnableOsdTime(4,1, 128, 8192*(kSubStreamHeight-60-(kSubStreamHeight/360)*8)/kSubStreamHeight + osd_time_ofs_y);
+#endif
+		
         GlobalPage::Instance()->page_set()->ReturnPreMenu();
     }
 }

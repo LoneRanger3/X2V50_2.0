@@ -1,4 +1,4 @@
-#include "gps.h"
+﻿#include "gps.h"
 #include "string.h"
 #include <stdio.h>
 #include <string.h>
@@ -25,7 +25,7 @@
 #define SIX_APP 1// 1--匹配6侦探
 #define COMPAT_PC// 兼容PC工具
 #define BUF_DATA_LEN_MAX       4096
-//#define SIMUlonION_GPS //模拟GPS数据
+#define SIMUlonION_GPS //模拟GPS数据
 #define GPS_DATA_NUM 600//需要大于或等于循环录像最长时长
 
 static unsigned char gps_data_buf[BUF_DATA_LEN_MAX] ={0};
@@ -50,6 +50,12 @@ unsigned char chOutputback[GPS_DATA_NUM][132]={0};
 char chInfomation_pc[128]={0};
 unsigned char chOutput_pc[GPS_DATA_NUM][132]={0};
 unsigned char chOutputback_pc[GPS_DATA_NUM][132]={0};
+#endif
+
+#if 1//OSD_SHOW_ADJUST
+unsigned char clean_gps_osd_flag = 0;//清除gps水印标志 1:清除
+static int last_clean_gps_osd_flag=-1;
+unsigned char gps_online_old_flag = 0;//gps定位标志 1:已定位
 #endif
 
 int gps_count=0;
@@ -720,7 +726,7 @@ void update_hardware_time(struct gps_time time1)
 
 
 
-
+void get_current_time(char* str);
 int gps_snr_sort()//信噪比数据处理
 {
     #define LEN 40
@@ -810,6 +816,57 @@ int gps_snr_sort()//信噪比数据处理
             gps.Elev[j] = _Elev_[i];
             gps.Azim[j] = _Azim_[i];
             j++;
+
+#if 0
+			static int snr_count = 0;
+			char snr_str[25] = {0};
+			char file_name[64] = {0};
+			
+			if(/*gps.PRN[i]>0 && gps.SNR[i]>0 &&*/ i <= 10){
+				
+				//wr_count = 0;
+				memset(snr_str, 0, 25);
+
+			    sprintf(snr_str, "[%03d]%02d ", gps.PRN[i], gps.SNR[i]);
+			    sprintf(file_name, "/mnt/tfcard/gps_snr.txt");
+				snr_count++;
+				
+				//XMLogW("[gps_snr_sort] 1 , i = (%d,%d) ,snr_str = %s \r\n", i, snr_count, snr_str);
+				
+    			FILE* fp = fopen(file_name, "at+");
+    			
+    			if (fp) {
+					if(gps.PRN[i]>0 && gps.SNR[i]>0){
+						
+    				    fwrite(snr_str, 1, 8, fp);
+					}
+				
+					if(i == 10 || snr_count == 11){
+						
+					    memset(snr_str, 0, 25);
+			#if 1
+						//
+						get_current_time(snr_str);
+						
+			#elif 0
+						int64_t pretime = GlobalData::Instance()->GetCurTime();
+						time_t pre = pretime;
+						struct tm* pre_time = localtime(&pre);
+						sprintf(snr_str, "  %04d.%02d.%02d %02d:%02d:%02d", pre_time->tm_year + 1900, pre_time->tm_mon + 1, pre_time->tm_mday, pre_time->tm_hour, pre_time->tm_min, pre_time->tm_sec);
+						
+			#else
+						//gps.GPRMC
+						sprintf(snr_str, "  %04d.%02d.%02d %02d:%02d:%02d", gps.GPRMC.time.year, gps.GPRMC.time.month, gps.GPRMC.time.day, gps.GPRMC.time.hour, gps.GPRMC.time.min, gps.GPRMC.time.sec);
+			#endif
+    				    fwrite(snr_str, 1, 21, fp);
+					
+    				    fwrite("\n", 1, 1, fp);
+						snr_count = 0;
+					}
+    				fclose(fp);
+    			}
+			}
+#endif
         }
         for (i=j;i<LEN;i++){
             gps.SNR[i] = 0;
@@ -868,6 +925,12 @@ int gps_data_gga(char *gps_data_frame,struct gga*_gga_)
     //XMLogI("gps_data_gga:\n _gga_->height=%f\n", _gga_->height);
     return 0;
 }
+
+extern int osd_time_ofs_y;
+extern int osd_data_init(void);
+#include "mpp/MppMdl.h"
+#include "DemoDef.h"
+
 int gps_data_rmc(char *gps_data_frame,struct rmc *_rmc_)
 {
     int table[32]={0},err=0,num=0,i=0;
@@ -878,6 +941,7 @@ int gps_data_rmc(char *gps_data_frame,struct rmc *_rmc_)
     static char time_updata_flag=0;
     int du=0;
     p1=strstr(data,"RMC");
+	
     if(!p1){
         XMLogE("======rmc err:%s\n",data);
         return 1;
@@ -905,8 +969,53 @@ int gps_data_rmc(char *gps_data_frame,struct rmc *_rmc_)
     _rmc_->state = *(data+table[1]+1);//定位状态
     if(_rmc_->state == 'A'){
         gps_online_flag = 1;
+
+   #if 1//X2V60_S_DEBUG1
+   		clean_gps_osd_flag = 1;
+   	
+       #if 1//OSD_SHOW_ADJUST
+   		if(gps_online_old_flag != gps_online_flag){
+   			
+   			if(gps_online_flag){
+   				
+   				gps_online_old_flag = gps_online_flag;
+
+    			XM_CONFIG_VALUE cfg_value;
+    			GlobalData::Instance()->car_config()->GetValue(CFG_Operation_GPS_Watermark, cfg_value);
+
+                if(cfg_value.bool_value){
+					
+   				    osd_time_ofs_y = OSD_TIME_ADJUST_Y;
+   				    MppMdl::Instance()->EnableOsdTime(4,1, 128, 8192*(kSubStreamHeight-60-(kSubStreamHeight/360)*8)/kSubStreamHeight + osd_time_ofs_y);
+   				}
+   			}
+   		}
+       #endif
+   #endif
     }else{
         gps_online_flag = 0;
+		gps_online_old_flag = 0;
+
+#if 1//X2V60_S_DEBUG1
+		if(last_clean_gps_osd_flag!=clean_gps_osd_flag){
+			
+			if(clean_gps_osd_flag){
+				
+				clean_gps_osd_flag = 0;
+				last_clean_gps_osd_flag=clean_gps_osd_flag;
+				
+        #if 1//OSD_SHOW_ADJUST
+				osd_time_ofs_y = OSD_GPS_ADJUST_Y;
+				clean_gps_osd_data(0);
+				MppMdl::Instance()->EnableOsdTime(4,1, 128, 8192*(kSubStreamHeight-60-(kSubStreamHeight/360)*8)/kSubStreamHeight + osd_time_ofs_y);
+		#else
+				clean_gps_osd_data(0);
+        #endif
+				
+			}
+		}
+#endif
+		
     }
 
     if(table[3]-table[2]>4){
@@ -1005,6 +1114,7 @@ int gps_data_rmc(char *gps_data_frame,struct rmc *_rmc_)
    //       _rmc_->time.min,_rmc_->time.sec,_rmc_->lon_direct,_rmc_->lon,_rmc_->lat_direct,_rmc_->lat,_rmc_->speed,_rmc_->speed_direct);
     sprintf(chInfomation,"%4d/%02d/%02d %02d:%02d:%02d %c:%.6f %c:%.6f %.1f km/h - - -  A:%.1f",_rmc_->time.year,_rmc_->time.month,_rmc_->time.day,_rmc_->time.hour,
            _rmc_->time.min,_rmc_->time.sec,_rmc_->lon_direct,flon_decode,_rmc_->lat_direct,flat_decode,_rmc_->speed,_rmc_->speed_direct);
+	
     #ifdef COMPAT_PC
     memset(chInfomation_pc,0,128);
     sprintf(chInfomation_pc,"%4d/%02d/%02d %02d:%02d:%02d %c:%.6f %c:%.6f %.1f km/h",_rmc_->time.year,_rmc_->time.month,_rmc_->time.day,_rmc_->time.hour,
@@ -1039,6 +1149,7 @@ int gps_data_rmc(char *gps_data_frame,struct rmc *_rmc_)
         memset(chInfomation,0,128);
         sprintf(chInfomation,"%4d/%02d/%02d %02d:%02d:%02d %c:%.6f %c:%.6f %.1f km/h",_rmc_->time.year,_rmc_->time.month,_rmc_->time.day,_rmc_->time.hour,
             _rmc_->time.min,_rmc_->time.sec,_rmc_->lon_direct,_rmc_->lon,_rmc_->lat_direct,_rmc_->lat,_rmc_->speed);
+	
         if(write_start)
         {
             MakeEncryptDataBlock(gps_count,chInfomation ,strlen(chInfomation),chOutput[gps_count]);
@@ -1452,7 +1563,9 @@ void gps_create_ui(int tmp)
             if(!gps_insert_img_){
             gps_insert_img_ = lv_img_create(GlobalPage::Instance()->page_main()->main_page_);
             lv_img_set_src(gps_insert_img_, image_path"gps_insert.png");
-           lv_obj_align(gps_insert_img_, LV_ALIGN_TOP_RIGHT, -size_w(110), size_h(2));
+           //lv_obj_align(gps_insert_img_, LV_ALIGN_TOP_RIGHT, -size_w(116), size_h(2));//110
+           lv_obj_align(gps_insert_img_, LV_ALIGN_BOTTOM_LEFT, size_w(10), -size_h(38));//110
+           
             if (gps_online_flag == 1) {
               lv_img_set_src(gps_insert_img_, image_path"gps_online.png");
             }else if(gps_insert_flag == 0){

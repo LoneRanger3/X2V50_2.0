@@ -40,4 +40,4 @@ make
 
 #cp $CURRENT_DIR/pack/target/netall_XM650V200_ADR.bin $CURRENT_DIR/netall_XM650V200_ADR.bin
 ./make_uboot_update_file/merge_file ./make_uboot_update_file/netall_XM650V200_CAR_X2V50.bin ./target/update.img ./make_uboot_update_file/uboot_upgrade_240x320.yuv ./target/netall_XM650V200_CAR_X2V50.bin
-./make_uboot_update_file/merge_file ./make_uboot_update_file/update.img ./target/update.img ./make_uboot_update_file/uboot_upgrade_key_240x320.yuv
+./make_uboot_update_file/merge_file ./make_uboot_update_file/update.img ./target/update.img ./make_uboot_update_file/uboot_upgrade_key_240x320.yuv# DO NOT DELETE

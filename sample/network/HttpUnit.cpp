@@ -1,4 +1,4 @@
-#include "HttpUnit.h"
+﻿#include "HttpUnit.h"
 #include <algorithm>
 #include <string>
 #include <sstream>
@@ -80,14 +80,34 @@ int HttpUnit::Run()
             return -1;
         }
 
-        // static int zgf = 1000;
-        // char str_file[64] = {0};
-        // sprintf(str_file, "/mnt/tfcard/%d.png", zgf++);
-        // FILE* fp = fopen(str_file, "wb");
-        // if (fp) {
-        //     fwrite(thumbnail_buf, 1, thumbnail_len, fp);
-        //     fclose(fp);
-        // }
+#if 0
+         static int zgf = 1000;
+		 XMLogW("[getthumbnail] 8, zgf:%d, thumbnail_len:%d \r\n", zgf, thumbnail_len);
+         static int wrlen = 0;
+         char str_file[64] = {0};
+
+		 #if 1
+		 if (strstr(file_path, "record") != NULL) {
+			 
+		     string strfile(file_path);
+			 const char* str1 = strfile.substr(28).c_str();   //只需要文件名，不包含路径
+             //sprintf(str_file, "/mnt/tfcard/thumbnail/%d_%s.png", zgf++, str1);
+             sprintf(str_file, "/mnt/tfcard/%d_%s.png", zgf++, str1);
+		 }
+		 #endif
+		 
+		 //chrono::milliseconds dura_w(2);
+		 XMLogW("[getthumbnail] 9 str_file:%s, zgf:%d, thumbnail_len:%d \r\n", str_file, zgf, thumbnail_len);
+         FILE* fp = fopen(str_file, "wb");
+         if (fp) {
+		 	
+		     //std::this_thread::sleep_for(dura_w);
+             wrlen = fwrite(thumbnail_buf, 1, thumbnail_len, fp);
+    		 XMLogW("[getthumbnail] 10 str_file:%s, zgf:%d, wrlen:%d \r\n", str_file, zgf, wrlen);
+             fclose(fp);
+         }
+#endif
+		
         StatusCode status_code = Ok;
         ostringstream oss;
         oss << "HTTP/1.1 " << status_code << " message" << "\r\n";

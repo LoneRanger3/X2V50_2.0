@@ -1,4 +1,4 @@
-#include <string>
+﻿#include <string>
 #include "osd_user.h"
 #include "xm_middleware_api.h"
 #include "xm_middleware_network.h"
@@ -8,10 +8,18 @@
 #include "global_data.h"
 #include "mpp/MppMdl.h"
 #include "DemoDef.h"
+#include "gps.h"
+
 #define OSDWidth_LOGO	320//水印LOGO图片的宽度
 #define OSDHeight_LOGO	64//水印LOGO图片的高度
+#if 0
+#define OSDWidth	32//GPS水印图片的宽度
+#define OSDHeight	48//GPS水印图片的高度
+#else
 #define OSDWidth	32//GPS水印图片的宽度
 #define OSDHeight	64//GPS水印图片的高度
+#endif
+
 #define R_Width     1920
 #define R_Heigth    1080
 
@@ -185,7 +193,7 @@ int osd_upgrade_all_data(char* str)
 	}
 	osd_upgrade_data(0,str);
 	osd_upgrade_data(1,str);
-	//osd_upgrade_data(2,str);//子码流
+	osd_upgrade_data(2,str);//子码流
 	return 0;
 }
 
@@ -213,6 +221,9 @@ int clean_gps_osd_data(char tmp)
 }
 #endif
 
+#if OSD_SHOW_ADJUST
+int osd_time_ofs_y = OSD_GPS_ADJUST_Y;
+#endif
 int osd_data_init(void)
 {
 	XM_MW_OSD_INFOS osd_infos;
@@ -273,13 +284,26 @@ int osd_data_init(void)
 	GlobalData::Instance()->car_config()->GetValue(CFG_Operation_Date_Watermark, cfg_value);
 	enable=cfg_value.bool_value;
 
+#if OSD_SHOW_ADJUST
+	if(gps_online_flag){
+	  
+	  osd_time_ofs_y = OSD_TIME_ADJUST_Y;
+	}else{
+	
+	  osd_time_ofs_y = OSD_GPS_ADJUST_Y;
+	}
+#endif
+
   // MppMdl::Instance()->EnableOsdTime(0,false, osd_x, osd_y);
    MppMdl::Instance()->EnableOsdTime(0,enable, osd_x, osd_y); //前摄时间水印
 
+   MppMdl::Instance()->EnableOsdTime(1,enable, osd_x, osd_y1); //后拉时间水印
 
-   MppMdl::Instance()->EnableOsdTime(1,enable, osd_x, osd_y1);
-
+#if OSD_SHOW_ADJUST
+   MppMdl::Instance()->EnableOsdTime(4,enable, osd_x, 8192*(kSubStreamHeight-60-(kSubStreamHeight/360)*8)/kSubStreamHeight + osd_time_ofs_y); //APP时间水印
+#else
    MppMdl::Instance()->EnableOsdTime(4,enable, osd_x, 8192*(kSubStreamHeight-60-(kSubStreamHeight/360)*8)/kSubStreamHeight); //APP时间水印
+#endif
 
 #if 0 //logo水印
       osdx = 128;

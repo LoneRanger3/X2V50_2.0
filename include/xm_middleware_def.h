@@ -20,6 +20,9 @@
 #define XM_MAX_OSD_WIDTH 1024//320
 #define XM_MAX_OSD_HEIGHT 64//128
 
+#define OSD_SYMBOL_TEST 0 //水印测试开关
+#define XM_MAX_OSD_TIME_NUM 16 //开水印测试为68，不开为16 OSD_SYMBOL_TEST
+
 /*------------------------------enum-------------------------------*/	
 //SD卡号，最多支持两张SD卡
 typedef enum _XMStorageSDCardNum

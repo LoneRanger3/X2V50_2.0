@@ -17,6 +17,28 @@
 #define COMPACT_RECORD_EN   1    //0去掉缩时录影功能，注意默认菜单配置参数要关闭            1-添加缩时录影功能
 #define G_SENSOR_EN         1    //0去掉重力功能 ，注意默认菜单配置参数要关闭               1-添加重力功能
 #define GPS_EN              1    //0不支持GPS               1-支持GPS功能
+#define OSD_SHOW_ADJUST     1    //搜不到gps时间水印下移，0关闭，1开启
+#define X2V50_PROJ_DEBUG    1 
+#define X2V50_2_PRODUCT_TEST    0    //生产测试(1.录像页面显示wifi名称密码。2.gsensor灵敏度打开。3.WiFi默认打开。4.gps模拟关闭)
+
+
+#if defined SUPPORT_4K
+
+#if 0 //720p开启
+#define OSD_TIME_ADJUST_Y -190
+#define OSD_GPS_ADJUST_Y  420
+#else
+#define OSD_TIME_ADJUST_Y 0
+#define OSD_GPS_ADJUST_Y  420
+#endif
+
+#else
+
+#define OSD_TIME_ADJUST_Y 0
+#define OSD_GPS_ADJUST_Y  420
+
+#endif
+
 int AlarmRegionCoorSw(float coor, float length, bool flag);
 
 //配置
@@ -133,7 +155,7 @@ const XM_CONFIG_UNIT CFG_ALL_OPERATION_UNITS[] =
 	{ CFG_Operation_Lcd_Light,			    "",		"lcd_light",			CFG_Operation_Value_Int,	60},
 	{ CFG_Operation_Language,				"",		"language",				CFG_Operation_Value_Int,	English},//  English  SimpChinese TradChinese
 	{ CFG_Operation_Key_Voice,				"",		"key_voice",			CFG_Operation_Value_Bool,	true},
-	{ CFG_Operation_boot_Voice,				"",		"boot_voice",			CFG_Operation_Value_Int,	Volume_High},
+	{ CFG_Operation_boot_Voice,				"",		"boot_voice",			CFG_Operation_Value_Int,	Volume_Mid},//Volume_High
 	{ CFG_Operation_Acc_Power_Supply,		"",		"acc_power_supply",		CFG_Operation_Value_Bool,	true},
 	{ CFG_Operation_Voice_Control,		    "",		"Voice_Control",		CFG_Operation_Value_Bool,	false},// false true
 	{ CFG_Operation_AutoShutdown_Time,			"",	"AutoShutdown_Time",	CFG_Operation_Value_Int,	0},
@@ -152,13 +174,21 @@ const XM_CONFIG_UNIT CFG_ALL_OPERATION_UNITS[] =
 	{ CFG_Operation_Reject_Flicker,			"",		"Reject_Flicker",		CFG_Operation_Value_Int,	0},
 	{ CFG_Operation_Compact_Record_Fps,			"",		"Compact_Record_Fps",			CFG_Operation_Value_Int,	0},
 	{ CFG_Operation_Compact_Record_Duration,	"",		"Compact_Record_Duration",		CFG_Operation_Value_Int,	0},
-	{ CFG_Operation_Collision_Sensitivity,		"",		"Collision_Sensitivity",		CFG_Operation_Value_Int,	Sensitivity_Close}, //Sensitivity_Low  Sensitivity_Mid
+    #if X2V50_2_PRODUCT_TEST
+	{ CFG_Operation_Collision_Sensitivity,		"",		"Collision_Sensitivity",		CFG_Operation_Value_Int,	Sensitivity_Mid},
+	#else
+	{ CFG_Operation_Collision_Sensitivity,		"",		"Collision_Sensitivity",		CFG_Operation_Value_Int,	Sensitivity_Close},
+	#endif
 	{ CFG_Operation_Record_Voice,				"",		"Record_Voice",					CFG_Operation_Value_Bool,	true},
 	{ CFG_Operation_Collision_Startup,			"",		"Collision_Startup",			CFG_Operation_Value_Bool,	false},
 	{ CFG_Operation_Car_Charger,				"",		"Car_Charger",					CFG_Operation_Value_Bool,	true},
 	{ CFG_Operation_Camera,						"",		"Camera",						CFG_Operation_Value_Int,	XM_PLAY_BOTH},
 	{ CFG_Operation_Date_Watermark,				"",		"Date_Watermark",				CFG_Operation_Value_Bool,	true},
-	{ CFG_Operation_WiFi,				        "",		"wifi",				            CFG_Operation_Value_Bool,	true},
+	#if X2V50_2_PRODUCT_TEST
+	{ CFG_Operation_WiFi,				        "",		"wifi",				            CFG_Operation_Value_Bool,	true},//生产软件默认打开
+	#else
+	{ CFG_Operation_WiFi,				        "",		"wifi",				            CFG_Operation_Value_Bool,	false},
+	#endif
     { CFG_Operation_Fatigue_reminder,		    "",		"fatigue",				        CFG_Operation_Value_Int,	0},
     { CFG_Operation_GPS_Watermark,		         "",		"gps",			    CFG_Operation_Value_Bool,	true},
     { CFG_Operation_GPS_Unit,				    "",		"speed_unit",				    CFG_Operation_Value_Int,	SpeeduUnit_Km},

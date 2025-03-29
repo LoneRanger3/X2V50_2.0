@@ -78,7 +78,11 @@ void PagePlayPic::CreatePage()
 			lv_obj_add_flag(playpic_btn_[i], LV_OBJ_FLAG_HIDDEN);
 		}
 	}
-  
+
+#if 1
+	GlobalPage::Instance()->page_set()->Createfunction_bar(play_pic_page_, 23, 0,false,true);
+#endif
+	
 }
 
 void PagePlayPic::BtnEvent(lv_event_t* e)
@@ -121,8 +125,8 @@ void PagePlayPic::OpenSetPage()
     lv_label_set_text(title_label_, GetParsedString("Set"));
     lv_obj_align(title_label_, LV_ALIGN_CENTER, 0, size_h(3));
 
-    lv_obj_t* menu_list_ = lv_create_page(set_page_, screen_width, size_h(190),
-        lv_color_make(16, 16, 16), 0, 0, lv_font_all, lv_color_white(), 0);
+    lv_obj_t* menu_list_ = lv_create_page(set_page_, screen_width, size_h(154),
+        lv_color_make(16, 16, 16), 0, 0, lv_font_all, lv_color_white(), 0);//190 160 154
     lv_obj_align(menu_list_, LV_ALIGN_TOP_MID, size_w(0), size_h(48));
     lv_obj_add_flag(menu_list_, LV_OBJ_FLAG_SCROLLABLE);
 
@@ -131,8 +135,8 @@ void PagePlayPic::OpenSetPage()
 	 GetParsedString("Lock all"), GetParsedString("Unlock all"),
 	/* GetParsedString("Main interface"),GetParsedString("Return")*/ };
 	for (int i = 0;i < PlaybackSubpage_Total;i++) {
-        set_btn_[i] = lv_create_btn(menu_list_, 320, 46, lv_color_make(68, 68, 68), 2,
-            OpenSubpage, LV_EVENT_ALL, (void*)i, 0);
+        set_btn_[i] = lv_create_btn(menu_list_, 320, 37, lv_color_make(68, 68, 68), 2,
+            OpenSubpage, LV_EVENT_ALL, (void*)i, 0);//46 37
         lv_obj_remove_style(set_btn_[i], NULL, LV_STATE_FOCUS_KEY);
         if (i == PlaybackSubpage_DelCur) {
             lv_obj_align(set_btn_[i], LV_ALIGN_TOP_LEFT, size_w(0), size_h(0));
@@ -149,6 +153,10 @@ void PagePlayPic::OpenSetPage()
 	}
     GlobalPage::Instance()->page_playback()->SelectFileStyle(menu_list_, screen_width, size_h(190));
 	lv_group_focus_next(GlobalData::Instance()->group);
+
+#if 1
+	GlobalPage::Instance()->page_set()->Createfunction_bar(set_page_,35,7,true,false);
+#endif
 }
 void PagePlayPic::DelSetPageEvent(lv_event_t* e)
 {
