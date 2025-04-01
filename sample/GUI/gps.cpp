@@ -25,7 +25,7 @@
 #define SIX_APP 1// 1--匹配6侦探
 #define COMPAT_PC// 兼容PC工具
 #define BUF_DATA_LEN_MAX       4096
-#define SIMUlonION_GPS //模拟GPS数据
+//#define SIMUlonION_GPS //模拟GPS数据
 #define GPS_DATA_NUM 600//需要大于或等于循环录像最长时长
 
 static unsigned char gps_data_buf[BUF_DATA_LEN_MAX] ={0};

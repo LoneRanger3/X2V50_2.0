@@ -182,6 +182,13 @@ void PageMain::CreatePage()
     }
 #endif
 
+
+    if (g_sd_status == XM_SD_NOEXIST){
+		
+		RED_ON;
+    	GREEN_OFF;
+    }
+
 #if 1//
 	//卡修复
 	int tep = 0;
@@ -325,7 +332,7 @@ void PageMain::Function_bar(bool flag)
 #if 1
         lv_obj_t* bar_wifi_img_ = lv_img_create(Function_page_);
         lv_img_set_src(bar_wifi_img_, image_path"0wifi.png");
-        lv_obj_align_to(bar_wifi_img_, silent_record_img_, LV_ALIGN_OUT_RIGHT_MID, size_w(10), size_h(0));
+        lv_obj_align_to(bar_wifi_img_, silent_record_img_, LV_ALIGN_OUT_RIGHT_MID, size_w(10), -size_h(2));
         
         lv_obj_t* slash_img4_ = lv_img_create(Function_page_);
         lv_img_set_src(slash_img4_, image_path"slash.png");
@@ -333,7 +340,7 @@ void PageMain::Function_bar(bool flag)
         
         playback_img_ = lv_img_create(Function_page_);
         lv_img_set_src(playback_img_, image_path"playback_on.png");
-        lv_obj_align_to(playback_img_, slash_img4_, LV_ALIGN_OUT_RIGHT_MID, -size_w(4), size_h(0));
+        lv_obj_align_to(playback_img_, slash_img4_, LV_ALIGN_OUT_RIGHT_MID, -size_w(4), size_h(1));
 #else
         playback_img_ = lv_img_create(Function_page_);
         lv_img_set_src(playback_img_, image_path"playback_on.png");
