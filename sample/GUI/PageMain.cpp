@@ -808,6 +808,18 @@ void PageMain::UpdateTime(lv_timer_t* timer)
                         }
                     }
                 #endif
+
+				#if 1
+				//30秒循环播报SD卡状态语音
+				if(GlobalPage::Instance()->page_main()->Handtip_box){
+					
+    				GlobalPage::Instance()->page_main()->audio_flag_++;
+    				if (GlobalPage::Instance()->page_main()->audio_flag_ % SD_CARD_PLAY_INTERVAL_TIME == 0)
+    				{
+    					GlobalPage::Instance()->page_main()->PlaySdCardStatus();
+    				}
+    				}
+				#endif
 			}
 
 			int date = current_time->tm_year + current_time->tm_mon + current_time->tm_mday;
@@ -923,7 +935,8 @@ void PageMain::HandOpenTipBox(void)
 	XMLogW("[HandOpenTipBox] g_sd_status = %d \r\n", g_sd_status);
 	//if (g_sd_status != XM_SD_NOEXIST || record_time_label_ != NULL record_timer_ != NULL){
 	if (g_sd_status != XM_SD_NOEXIST){
-		//
+		
+		Handtip_box = NULL;
         return;
 	}
 
@@ -1536,6 +1549,19 @@ void PageMain::LockCurrentFile()
 			XM_Middleware_Storage_LockCurrentFile(XM_STORAGE_SDCard_0, Direction_Behind, false);
 		}
 		RED_OFF;
+	}
+}
+
+void PageMain::PlaySdCardStatus()
+{
+	std::string sound_file = kAudioPath;
+	// 30秒循环重新计时
+	GlobalPage::Instance()->page_main()->audio_flag_ = 1;
+
+	if (g_sd_status == XM_SD_NOEXIST) {
+		
+		sound_file += "Please insert the SD card_16k.pcm";
+		MppMdl::Instance()->PlaySound(sound_file.c_str());
 	}
 }
 

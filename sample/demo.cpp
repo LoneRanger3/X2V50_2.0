@@ -1599,6 +1599,7 @@ void* timer_hander_thread(void* args)
 			GlobalPage::Instance()->page_main()->RecordOnStartup();
 			
 			XMLogW("[HandOpenTipBox] after RecordOnStartup, g_sd_status = %d \r\n", g_sd_status);
+			GlobalPage::Instance()->page_main()->audio_flag_ = SD_CARD_PLAY_INTERVAL_TIME -2;
 			GlobalPage::Instance()->page_main()->HandOpenTipBox();
 		}
 	}

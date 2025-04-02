@@ -76,6 +76,7 @@ public:
 	void Remaining_update_time();
     void Function_bar(bool flag);
 	void HandOpenTipBox(void);
+	void PlaySdCardStatus(void);
 	
 private:
 	void CreatePage();
@@ -153,6 +154,7 @@ public:
 	int Settings_function_bar_cnt;
     bool Settings_Function_bar_flag;
 	lv_obj_t* Handtip_box;
+	int audio_flag_;
 	
 private:
 	lv_obj_t* time_label_;
