@@ -250,7 +250,7 @@ int osd_data_init(void)
 		  move=20;
 	   }else if(cfg_value.int_value==1440){
           width_v=2560;
-		  height_v=1440-128;
+		  height_v=1440 - 460;//-128 -上移
 		  move=18;
 	   }else if(cfg_value.int_value==k3KHeight || cfg_value.int_value==k4KHeight){
         //   if(!MppMdl::Instance()->AdLoss()){
@@ -264,7 +264,7 @@ int osd_data_init(void)
 			 move=16;
 			}else{
 			 width_v=3840;
-		     height_v=k4KHeight-1024-256-128; 
+		     height_v=k4KHeight-1024;//-256-128 +下移
 			 move=16;
 			}
 		//   }
