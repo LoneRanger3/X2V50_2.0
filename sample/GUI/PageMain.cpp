@@ -953,7 +953,7 @@ void PageMain::HandOpenTipBox(void)
 	lv_obj_t* label = lv_create_image(Handtip_box_, size_w(28), size_w(28), image_path"msgwarn1.png");
 		lv_obj_align(label, LV_ALIGN_TOP_MID, 0, size_h(6));
 
-	label = lv_create_label(Handtip_box_, size_w(220), "Please insert SD card", LV_TEXT_ALIGN_CENTER, 0);
+	label = lv_create_label(Handtip_box_, size_w(220), GetParsedString("Please insert SD card"), LV_TEXT_ALIGN_CENTER, 0);
 	lv_obj_align(label, LV_ALIGN_CENTER, 0, size_h(14));
 }
 
