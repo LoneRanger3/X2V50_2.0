@@ -811,7 +811,7 @@ void PageMain::UpdateTime(lv_timer_t* timer)
 
 				#if 1
 				//30秒循环播报SD卡状态语音
-				if(GlobalPage::Instance()->page_main()->Handtip_box){
+				if(GlobalPage::Instance()->page_main()->Handtip_box_){
 					
     				GlobalPage::Instance()->page_main()->audio_flag_++;
     				if (GlobalPage::Instance()->page_main()->audio_flag_ % SD_CARD_PLAY_INTERVAL_TIME == 0)
@@ -936,24 +936,24 @@ void PageMain::HandOpenTipBox(void)
 	//if (g_sd_status != XM_SD_NOEXIST || record_time_label_ != NULL record_timer_ != NULL){
 	if (g_sd_status != XM_SD_NOEXIST){
 		
-		Handtip_box = NULL;
+		Handtip_box_ = NULL;
         return;
 	}
 
 	RED_ON;
 	GREEN_OFF;
 
-	Handtip_box = lv_create_page(lv_scr_act(), size_w(220), size_h(130),
+	Handtip_box_ = lv_create_page(lv_scr_act(), size_w(220), size_h(130),
 		lv_color_make(99, 99, 99), 0, 2, lv_font_all, lv_color_white(), 0);
-	lv_obj_align(Handtip_box, LV_ALIGN_CENTER, 0, 0);
+	lv_obj_align(Handtip_box_, LV_ALIGN_CENTER, 0, 0);
 
-	lv_obj_set_style_border_color(Handtip_box, lv_color_make(99, 99, 99), 0);
-	lv_obj_set_style_radius(Handtip_box, 10, 0);
+	lv_obj_set_style_border_color(Handtip_box_, lv_color_make(99, 99, 99), 0);
+	lv_obj_set_style_radius(Handtip_box_, 10, 0);
 
-	lv_obj_t* label = lv_create_image(Handtip_box, size_w(28), size_w(28), image_path"msgwarn1.png");
+	lv_obj_t* label = lv_create_image(Handtip_box_, size_w(28), size_w(28), image_path"msgwarn1.png");
 		lv_obj_align(label, LV_ALIGN_TOP_MID, 0, size_h(6));
 
-	label = lv_create_label(Handtip_box, size_w(220), "Please insert SD card", LV_TEXT_ALIGN_CENTER, 0);
+	label = lv_create_label(Handtip_box_, size_w(220), "Please insert SD card", LV_TEXT_ALIGN_CENTER, 0);
 	lv_obj_align(label, LV_ALIGN_CENTER, 0, size_h(14));
 }
 

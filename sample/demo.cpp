@@ -410,10 +410,10 @@ int ProcessEvent(long handle, XMEventType event_type, const std::string& msg, in
 				GlobalPage::Instance()->page_usb()->SetUsbFunc(USB_MODE_MASS_STORAGE);
 			}
 
-			if(GlobalPage::Instance()->page_main()->Handtip_box){
+			if(GlobalPage::Instance()->page_main()->Handtip_box_){
 				
-			    lv_obj_del(GlobalPage::Instance()->page_main()->Handtip_box);
-				GlobalPage::Instance()->page_main()->Handtip_box = NULL;
+			    lv_obj_del(GlobalPage::Instance()->page_main()->Handtip_box_);
+				GlobalPage::Instance()->page_main()->Handtip_box_ = NULL;
 			}
 			
 		#if 1	

@@ -151,9 +151,7 @@ public:
 	int Fatigue_reminder_value;
 	int Function_bar_cnt;
     bool Function_bar_flag;
-	int Settings_function_bar_cnt;
-    bool Settings_Function_bar_flag;
-	lv_obj_t* Handtip_box;
+	lv_obj_t* Handtip_box_;
 	int audio_flag_;
 	
 private:

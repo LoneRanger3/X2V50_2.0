@@ -20,7 +20,7 @@
 #define OSD_SHOW_ADJUST     1    //搜不到gps时间水印下移，0关闭，1开启
 #define X2V50_PROJ_DEBUG    1 
 #define X2V50_2_PRODUCT_TEST    0    //生产测试(1.录像页面显示wifi名称密码。2.gsensor灵敏度打开。3.WiFi默认打开。4.gps模拟关闭)
-#define SD_CARD_PLAY_INTERVAL_TIME 11  //SD卡播报间隔
+#define SD_CARD_PLAY_INTERVAL_TIME 30  //SD卡播报间隔
 
 #if defined SUPPORT_4K
 
