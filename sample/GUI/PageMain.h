@@ -75,6 +75,8 @@ public:
 	void AppMenuValue(void);
 	void Remaining_update_time();
     void Function_bar(bool flag);
+	void HandOpenTipBox(void);
+	
 private:
 	void CreatePage();
 	void CompactRecord();
@@ -150,6 +152,7 @@ public:
     bool Function_bar_flag;
 	int Settings_function_bar_cnt;
     bool Settings_Function_bar_flag;
+	lv_obj_t* Handtip_box;
 	
 private:
 	lv_obj_t* time_label_;
