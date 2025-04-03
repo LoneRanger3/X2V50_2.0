@@ -441,7 +441,7 @@ const struct menu_table sys_menu_config_table[] = {
        Subpage_LanguageSet,                       //菜单列表名
        {image"language.png",image"language-.png"},            //一级菜单图片路径
        "Language",     //一级菜单列表文案
-       {"SimpChinese","TradChinese","Japanese",	"English",/*"Thai",*/"Russian","German","French","Italian","Spanish","Polish","Arabic"},//二级菜单列表显示的文案
+       {"SimpChinese","TradChinese","Japanese",	"English","Russian","German","French","Italian","Spanish","Polish","Arabic"},//二级菜单列表显示的文案 /*"Thai",*/
        {SimpChinese,TradChinese, Japanese, English,/*Thai,*/Russian, German, French, Italian, Spanish, Polish,Arabic},    //此菜单实际生效的值，默认选项值必定为其中之一
         11,       //二级菜单个数
        CFG_Operation_Language,

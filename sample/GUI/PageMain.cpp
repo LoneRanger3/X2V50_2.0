@@ -46,6 +46,8 @@ void PageMain::OpenPage()
 }
 
 #include "cr_sdio.h"
+extern char* kAudioPath;
+extern char* kAudioPathLan;
 void PageMain::CreatePage()
 {
 	main_page_ = lv_create_page(lv_scr_act(), screen_width, screen_height, lv_color_black(), 0, 0,
@@ -218,6 +220,18 @@ void PageMain::CreatePage()
 	}
 #endif
 
+	cfg_value.int_value = English;
+	GlobalData::Instance()->car_config()->GetValue(CFG_Operation_Language, cfg_value);
+	GlobalPage::Instance()->page_main()->language_value_ = cfg_value.int_value;
+    if(GlobalPage::Instance()->page_main()->language_value_ == Russian){
+		
+		kAudioPathLan = "/mnt/custom/Audio/russian/";
+    	//Voice_prompts("Please fasten your seat belt.pcm");
+	}else{
+	
+    	kAudioPathLan = "/mnt/custom/Audio/english/";
+	}
+	
 	//录像界面水印
 	// x2_logo_img_ = lv_img_create(main_page_);
 	// lv_img_set_src(x2_logo_img_, image_path"Safe_cam.png");
@@ -243,7 +257,11 @@ void PageMain::RecordOnStartup()
 				lv_obj_clear_flag(lock_png_, LV_OBJ_FLAG_HIDDEN);
 				XM_Middleware_Storage_CollisionRecord(-1);
 				lock_current_recording_file_ = true;
-				Voice_prompts("Video locked_16k.pcm");
+				if(GlobalPage::Instance()->page_main()->language_value_ != Russian){
+					
+				    Voice_prompts("Video locked_16k.pcm");
+				}
+				
 				StartRecord();
 				RED_ON;
 				if (record_label_) {
@@ -430,14 +448,27 @@ void PageMain::BtnEvent(lv_event_t* e)
 			page_main->LockCurrentFile();
 		}
 		else if (user_data == RecordPageBtnFlag_Wifi) {
-           page_main->WifiEnable(!page_main->wifi_enable_);
+			
+    		page_main->WifiEnable(!page_main->wifi_enable_);
+		    if(GlobalPage::Instance()->page_main()->playsound_flag_){
+				
+			    std::string sound_file = kAudioPathLan;
+                if(page_main->wifi_enable_){
+
+            		sound_file += "WiFi is turned on.pcm";
+                }else{
+
+    				sound_file += "WiFi is turned off.pcm";
+                }
+				MppMdl::Instance()->PlaySound(sound_file.c_str());
+			}
 		}
 	}
 }
 
 int PageMain::WifiEnable(bool enable)
 {
-	XMLogI("WifiEnable enable = %d", enable);
+	XMLogI("WifiEnable enable = %d \r\n", enable);
 	if (wifi_enable_ == enable) {
 		XMLogE("WifiEnable error");
 		return -1;
@@ -1532,7 +1563,11 @@ void PageMain::LockCurrentFile()
 			XM_Middleware_Storage_LockCurrentFile(XM_STORAGE_SDCard_0, Direction_Behind, true);
 			//OpenTipBox("The current file is locked");
 			RED_ON;
-			Voice_prompts("Video locked_16k.pcm");
+			
+			if(GlobalPage::Instance()->page_main()->language_value_ != Russian){
+				
+			    Voice_prompts("Video locked_16k.pcm");
+			}
 		}
 	}
 	else {
@@ -1554,7 +1589,7 @@ void PageMain::LockCurrentFile()
 
 void PageMain::PlaySdCardStatus()
 {
-	std::string sound_file = kAudioPath;
+	std::string sound_file = kAudioPathLan;
 	// 30秒循环重新计时
 	GlobalPage::Instance()->page_main()->audio_flag_ = 1;
 
@@ -1713,8 +1748,14 @@ void PageMain::CheckSDStatus(bool checked_speed, bool need_speed_tip, bool need_
 		OpenTipBox("Memory card is not read-write, please format the memory card");
 	}
 	else if (g_sd_status == XM_SD_NOSPACE) {
-		if(nospace_tip)
+		if(nospace_tip){
+			
 			OpenTipBox("SD card space is insufficient");
+			if(GlobalPage::Instance()->page_main()->language_value_ == Russian){
+				
+			    Voice_prompts("SD card is full.pcm");
+			}
+		}
 	}
 	else {
 		OpenTipBox("Please insert SD card");
@@ -2424,10 +2465,11 @@ void PageMain::Voice_prompts(const char* file_name)
 	XM_CONFIG_VALUE cfg_value;
 	 cfg_value.int_value = SimpChinese;
 	 GlobalData::Instance()->car_config()->GetValue(CFG_Operation_Language, cfg_value);
-	if( cfg_value.int_value == English){
+	//if( cfg_value.int_value == English)
+	  {
 		 GlobalData::Instance()->car_config()->GetValue(CFG_Operation_boot_Voice, cfg_value);
         if(cfg_value.int_value){
-		std::string sound_file = kAudioPath;
+		std::string sound_file = kAudioPathLan;
 		sound_file += file_name;
 		MppMdl::Instance()->PlaySound(sound_file.c_str());
 	  }

@@ -369,11 +369,13 @@ void OnMWEventCallBack(long handle, XMEventType event_type, const char* msg, int
 			GlobalPage::Instance()->page_main()->OpenScreen();
 		}
 
+		#if 0
 		if (event_type != XM_EVENT_KEYWORD_ZHUAPAIZHAOPIAN) {
 			std::string sound_file = kAudioPath;
 			sound_file += "haode_16k.pcm";
 			MppMdl::Instance()->PlaySound(sound_file.c_str());
 		}
+		#endif
 	}
 }
 
@@ -1170,6 +1172,7 @@ int ProcessEvent(long handle, XMEventType event_type, const std::string& msg, in
 			if (ret < 0) {
 				XMLogE("set config error, opr=CFG_Operation_boot_Voice");
 			}
+			GlobalPage::Instance()->page_main()->playsound_flag_ = cfg_value.int_value;
 		#endif
 		}
 		break;
@@ -1791,6 +1794,7 @@ int main(int argc, char *argv[ ])
         if(ret>=0 && cfg_value.int_value){
 		std::string sound_file = kAudioPath;
 		sound_file += "kaiji_16k.pcm";
+		GlobalPage::Instance()->page_main()->playsound_flag_ = cfg_value.int_value;
 		MppMdl::Instance()->PlaySound(sound_file.c_str());
 		}
 		cfg_value.bool_value = false;

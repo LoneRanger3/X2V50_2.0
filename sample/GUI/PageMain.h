@@ -153,6 +153,8 @@ public:
     bool Function_bar_flag;
 	lv_obj_t* Handtip_box_;
 	int audio_flag_;
+	int language_value_;
+	int playsound_flag_;
 	
 private:
 	lv_obj_t* time_label_;

@@ -1,4 +1,4 @@
-#ifndef __GLOBAL_DATA_H__
+﻿#ifndef __GLOBAL_DATA_H__
 #define __GLOBAL_DATA_H__
 
 #include <string>
@@ -27,7 +27,8 @@ extern  lv_font_t* lv_font_all;
 
 extern const char* kTFCardPath;
 extern const char* kUDiskPath;
-extern const char* kAudioPath;
+extern char* kAudioPath;
+extern char* kAudioPathLan;
 extern const char* kUpdateFileName;
 extern const int k3KHeight;
 extern const int k4KHeight;
