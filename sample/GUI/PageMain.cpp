@@ -1795,6 +1795,7 @@ void PageMain::OpenSDSpeedTipBox(int write_speed, bool low_speed, int delay_time
 		OpenTipBox(string, 3000, false);
 	}
 }
+
 void PageMain::ShutDownTimer_PullPowerOn(lv_timer_t* timer)
 {
 	static int cnt=0;

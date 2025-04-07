@@ -284,8 +284,18 @@ int osd_data_init(void)
 	GlobalData::Instance()->car_config()->GetValue(CFG_Operation_Date_Watermark, cfg_value);
 	enable=cfg_value.bool_value;
 
+#if GPS_EN
+	cfg_value.bool_value = true;
+	GlobalData::Instance()->car_config()->GetValue(CFG_Operation_GPS_Watermark, cfg_value);
+#endif
+
 #if OSD_SHOW_ADJUST
-	if(gps_online_flag){
+    #if GPS_EN	
+	if(gps_online_flag && cfg_value.bool_value)
+	#else
+	if(gps_online_flag)
+	#endif
+	{
 	  
 	  osd_time_ofs_y = OSD_TIME_ADJUST_Y;
 	}else{

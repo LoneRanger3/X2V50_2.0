@@ -1828,7 +1828,9 @@ void PageSysSet::OpenGpsInfoPage()
     gps_info_page_ = page;
 }
 
+#if OSD_SHOW_ADJUST
 extern int osd_time_ofs_y;
+#endif
 #include "mpp/MppMdl.h"
 #include "DemoDef.h"
 
@@ -1846,22 +1848,22 @@ void PageSysSet::GpsWatermark(lv_event_t* e)
         if (ret < 0) {
             XMLogE("set config error, opr=CFG_Operation_GPS_Watermark");
         }
-		osd_data_init();
-
-#if 1//OSD_SHOW_ADJUST
-        if(user_data){
+		
+#if 0//OSD_SHOW_ADJUST
+		if(user_data){
 			
-		    osd_time_ofs_y = OSD_TIME_ADJUST_Y;
+			osd_time_ofs_y = OSD_TIME_ADJUST_Y;
 
 		}else{
 		
-		    clean_gps_osd_data(0);
+			//clean_gps_osd_data(0);
 			osd_time_ofs_y = OSD_GPS_ADJUST_Y;
 		}
 		
-		MppMdl::Instance()->EnableOsdTime(4,1, 128, 8192*(kSubStreamHeight-60-(kSubStreamHeight/360)*8)/kSubStreamHeight + osd_time_ofs_y);
+		//MppMdl::Instance()->EnableOsdTime(4,1, 128, 8192*(kSubStreamHeight-60-(kSubStreamHeight/360)*8)/kSubStreamHeight + osd_time_ofs_y);
 #endif
-		
+
+		osd_data_init();
         GlobalPage::Instance()->page_set()->ReturnPreMenu();
     }
 }

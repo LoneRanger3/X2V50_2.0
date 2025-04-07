@@ -385,7 +385,7 @@ void OnMWLogCallback(char* log_buf, int log_len, int64_t user)
 	LogFileManager::Instance()->get_log_data(log_buf,log_len,user);
 }
 
-#if 1//OSD_SHOW_ADJUST
+#if OSD_SHOW_ADJUST
 extern int osd_time_ofs_y;
 #endif
 int ProcessEvent(long handle, XMEventType event_type, const std::string& msg, int param) 
@@ -1112,7 +1112,7 @@ int ProcessEvent(long handle, XMEventType event_type, const std::string& msg, in
 			}
 			osd_data_init();
 
-            #if 1//OSD_SHOW_ADJUST
+            #if OSD_SHOW_ADJUST
 			if(!param){//关闭时间水印
 			
 				clean_gps_osd_data(0);
