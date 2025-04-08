@@ -226,12 +226,11 @@ void PageMain::CreatePage()
     if(GlobalPage::Instance()->page_main()->language_value_ == Russian){
 		
 		kAudioPathLan = "/mnt/custom/Audio/russian/";
-    	//Voice_prompts("Please fasten your seat belt.pcm");
 	}else{
 	
     	kAudioPathLan = "/mnt/custom/Audio/english/";
 	}
-	
+	//Voice_prompts("Please fasten your seat belt.pcm");
 	//录像界面水印
 	// x2_logo_img_ = lv_img_create(main_page_);
 	// lv_img_set_src(x2_logo_img_, image_path"Safe_cam.png");
@@ -816,8 +815,18 @@ void PageMain::UpdateTime(lv_timer_t* timer)
 						object->Fatigue_reminder_cnt++;
 						if (object->Fatigue_reminder_cnt > object->Fatigue_reminder_value*60*60) {
 							object->Fatigue_reminder_cnt = 0;
-							std::string sound_file = kAudioPath;
-		                    sound_file += "dididi.pcm";
+
+						    std::string sound_file = NULL;
+						    if(GlobalPage::Instance()->page_main()->language_value_ == Russian){
+								
+								sound_file = kAudioPath;
+								sound_file += "dididi.pcm";
+							}else{
+							    
+								sound_file = kAudioPathLan;
+								sound_file += "Fatigue driving, please park nearby and rest.pcm";
+							}
+							
 		                    MppMdl::Instance()->PlaySound(sound_file.c_str());
 							if (object->Fatigue_reminder_value==1){
 								object->OpenTipBox("You have been driving for 1 hour, please pay attention to rest");
@@ -1751,7 +1760,8 @@ void PageMain::CheckSDStatus(bool checked_speed, bool need_speed_tip, bool need_
 		if(nospace_tip){
 			
 			OpenTipBox("SD card space is insufficient");
-			if(GlobalPage::Instance()->page_main()->language_value_ == Russian){
+			//if(GlobalPage::Instance()->page_main()->language_value_ == Russian)
+			{
 				
 			    Voice_prompts("SD card is full.pcm");
 			}
