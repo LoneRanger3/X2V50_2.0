@@ -23,6 +23,10 @@
 #define SD_CARD_PLAY_INTERVAL_TIME 30  //SD卡播报间隔
 #define AIPAIPAI_PROJECT_ARABIC 1  //爱拍拍阿拉伯地区定制
 
+#if AIPAIPAI_PROJECT_ARABIC
+#define COMPACT_RECORD_EN   0   //爱拍拍阿拉伯地区不开缩时录影，只开停车监控
+#endif
+
 #if defined SUPPORT_4K
 
 #if 0 //720p开启
