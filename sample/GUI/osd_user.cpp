@@ -221,6 +221,7 @@ int clean_gps_osd_data(char tmp)
 }
 #endif
 
+#include "global_page.h"
 #if OSD_SHOW_ADJUST
 int osd_time_ofs_y = OSD_GPS_ADJUST_Y;
 #endif
@@ -406,7 +407,18 @@ int osd_data_init(void)
 			 osd_infos.osd[i][j].x =128+20*32*8192/width_v;  //超始位置横坐标，以8192为基准	
 			 osd_infos.osd[i][j].y = osd_y;  //超始位置纵坐标，以8192为基准
 		   }else if(i==1){
+		   	
+              #if AIPAIPAI_PROJECT_ARABIC
+  		      if(GlobalPage::Instance()->page_main()->language_value_ == Arabic){
+  			   
+  			    osd_infos.osd[i][j].x =128+20*32*8192/1920 + OSD_TIME_OFS_X;  //阿拉伯语水印右移
+  		      }else{
+  			   
+  			    osd_infos.osd[i][j].x =128+20*32*8192/1920;  //超始位置横坐标，以8192为基准
+  		      }
+		   	  #else
 			  osd_infos.osd[i][j].x =128+20*32*8192/1920;  //超始位置横坐标，以8192为基准
+			  #endif
 			  osd_infos.osd[i][j].y = osd_y1;  //超始位置纵坐标，以8192为基准
 		   }
 			osd_infos.osd[i][j].width = OSDNum*OSDWidth; //不能超过XM_MAX_OSD_WIDTH
@@ -418,10 +430,22 @@ int osd_data_init(void)
 			  osd_infos.osd[i][j].up = false; //是否放大，true放大1倍
 			}
 			if(i==2){
-			  osd_infos.osd[i][j].x =128;  //超始位置横坐标，以8192为基准
-			  osd_infos.osd[i][j].y =osd_y4;  //超始位置纵坐标，以8192为基准
-			  osd_infos.osd[i][j].width = OSDNum*OSDWidth/2; //不能超过XM_MAX_OSD_WIDTH
-		      osd_infos.osd[i][j].height = OSDHeight/2; //不超过XM_MAX_OSD_HEIGHT
+
+			    #if AIPAIPAI_PROJECT_ARABIC
+    			if(GlobalPage::Instance()->page_main()->language_value_ == Arabic){
+					
+    				osd_infos.osd[i][j].x =osd_x + OSD_TIME_OFS_X;  //阿拉伯语水印右移
+    			}else{
+					
+			        osd_infos.osd[i][j].x =osd_x;  //超始位置横坐标，以8192为基准
+			    }
+				#else
+				osd_infos.osd[i][j].x =osd_x;  //超始位置横坐标，以8192为基准
+				#endif
+				
+			    osd_infos.osd[i][j].y =osd_y4;  //超始位置纵坐标，以8192为基准
+			    osd_infos.osd[i][j].width = OSDNum*OSDWidth/2; //不能超过XM_MAX_OSD_WIDTH
+		        osd_infos.osd[i][j].height = OSDHeight/2; //不超过XM_MAX_OSD_HEIGHT
 		   }
 		   cfg_value.bool_value = true;
 	       GlobalData::Instance()->car_config()->GetValue(CFG_Operation_GPS_Watermark, cfg_value);

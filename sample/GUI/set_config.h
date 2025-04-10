@@ -21,6 +21,7 @@
 #define X2V50_PROJ_DEBUG    1 
 #define X2V50_2_PRODUCT_TEST    0    //生产测试(1.录像页面显示wifi名称密码。2.gsensor灵敏度打开。3.WiFi默认打开。4.gps模拟关闭)
 #define SD_CARD_PLAY_INTERVAL_TIME 30  //SD卡播报间隔
+#define AIPAIPAI_PROJECT_ARABIC 1  //爱拍拍阿拉伯地区定制
 
 #if defined SUPPORT_4K
 
@@ -30,6 +31,8 @@
 #else
 #define OSD_TIME_ADJUST_Y 0
 #define OSD_GPS_ADJUST_Y  420
+#define OSD_TIME_OFS_X  750
+
 #endif
 
 #else
@@ -153,7 +156,11 @@ const XM_CONFIG_UNIT CFG_ALL_OPERATION_UNITS[] =
 	//系统设置初始化
 	{ CFG_Operation_Lcd_OffTime,			"",		"lcd_offtime",			CFG_Operation_Value_Int,	0},//0
 	{ CFG_Operation_Lcd_Light,			    "",		"lcd_light",			CFG_Operation_Value_Int,	60},
-	{ CFG_Operation_Language,				"",		"language",				CFG_Operation_Value_Int,	English},//  English  SimpChinese TradChinese
+	#if AIPAIPAI_PROJECT_ARABIC
+	{ CFG_Operation_Language,				"",		"language",				CFG_Operation_Value_Int,	Arabic},//  Arabic
+	#else
+	{ CFG_Operation_Language,				"",		"language",				CFG_Operation_Value_Int,	English},//  English
+	#endif
 	{ CFG_Operation_Key_Voice,				"",		"key_voice",			CFG_Operation_Value_Bool,	true},
 	{ CFG_Operation_boot_Voice,				"",		"boot_voice",			CFG_Operation_Value_Int,	Volume_Mid},//Volume_High
 	{ CFG_Operation_Acc_Power_Supply,		"",		"acc_power_supply",		CFG_Operation_Value_Bool,	true},

@@ -1940,6 +1940,11 @@ int main(int argc, char *argv[ ])
 			return XM_SUCCESS;
 		}
 		else {
+
+    		cfg_value.int_value = English;
+    		GlobalData::Instance()->car_config()->GetValue(CFG_Operation_Language, cfg_value);
+    		GlobalPage::Instance()->page_main()->language_value_ = cfg_value.int_value;
+		
 			osd_data_init();
 			//Adjust_Screen_Effect();
 			//设置UI界面操作事件回调函数，ui界面中开始存储、停止存储、查询查询、点播等操作，可以通过GlobalData::Instance()->ui_event_cb_回调出来
