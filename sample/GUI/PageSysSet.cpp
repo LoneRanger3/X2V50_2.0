@@ -1866,8 +1866,14 @@ void PageSysSet::GpsWatermark(lv_event_t* e)
 		
 		//MppMdl::Instance()->EnableOsdTime(4,1, 128, 8192*(kSubStreamHeight-60-(kSubStreamHeight/360)*8)/kSubStreamHeight + osd_time_ofs_y);
 #endif
-
+		
+		if(cfg_value.bool_value){
+			
+		    GlobalData::Instance()->car_config()->SetValue(CFG_Operation_Date_Watermark, cfg_value);
+		}
+		
 		osd_data_init();
+
         GlobalPage::Instance()->page_set()->ReturnPreMenu();
     }
 }
