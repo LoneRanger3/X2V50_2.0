@@ -816,7 +816,7 @@ void PageMain::UpdateTime(lv_timer_t* timer)
 						if (object->Fatigue_reminder_cnt > object->Fatigue_reminder_value*60*60) {
 							object->Fatigue_reminder_cnt = 0;
 
-						    std::string sound_file = NULL;
+						    std::string sound_file;
 						    if(GlobalPage::Instance()->page_main()->language_value_ == Russian){
 								
 								sound_file = kAudioPath;
